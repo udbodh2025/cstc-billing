@@ -1,0 +1,235 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Admin User",
+      "email": "admin@example.com",
+      "role": "admin",
+      "createdAt": "2023-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "name": "Editor User",
+      "email": "editor@example.com",
+      "role": "editor",
+      "createdAt": "2023-01-15T00:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "name": "Viewer User",
+      "email": "viewer@example.com",
+      "role": "viewer",
+      "createdAt": "2023-02-01T00:00:00.000Z"
+    },
+    {
+      "id": "5dd98b3b-9d82-4a64-b2b1-541911bd6c4a",
+      "name": "Test",
+      "email": "test@test.com",
+      "role": "admin",
+      "createdAt": "2025-03-12T08:43:03.218Z"
+    }
+  ],
+  "contentTypes": [
+    {
+      "id": "1",
+      "name": "Blog Post",
+      "slug": "blog-post",
+      "fields": [
+        {
+          "id": "field1",
+          "name": "Title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "field2",
+          "name": "Content",
+          "type": "textarea",
+          "required": true
+        },
+        {
+          "id": "field3",
+          "name": "Featured Image",
+          "type": "image",
+          "required": false
+        },
+        {
+          "id": "field4",
+          "name": "Publish Date",
+          "type": "date",
+          "required": true
+        }
+      ],
+      "createdAt": "2023-03-01T00:00:00.000Z",
+      "updatedAt": "2023-03-01T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "name": "Product",
+      "slug": "product",
+      "fields": [
+        {
+          "id": "field1",
+          "name": "Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "field2",
+          "name": "Description",
+          "type": "textarea",
+          "required": true
+        },
+        {
+          "id": "field3",
+          "name": "Price",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "field4",
+          "name": "Images",
+          "type": "image",
+          "required": false
+        },
+        {
+          "id": "field5",
+          "name": "In Stock",
+          "type": "boolean",
+          "required": true
+        }
+      ],
+      "createdAt": "2023-03-15T00:00:00.000Z",
+      "updatedAt": "2023-03-15T00:00:00.000Z"
+    },
+    {
+      "id": "a70c",
+      "name": "Bs Layout",
+      "slug": "bs-layout1",
+      "fields": [
+        {
+          "id": "c61a3945-23c4-4b97-a630-f67784550eb1",
+          "name": "sGroupCode",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "a36a4d27-50f8-4a48-99cc-943e3b42f144",
+          "name": "sDescription",
+          "type": "text",
+          "required": false
+        }
+      ],
+      "createdAt": "2025-03-14T07:21:54.715Z",
+      "updatedAt": "2025-03-16T05:50:11.987Z"
+    }
+  ],
+  "menuModules": [
+    {
+      "id": "1",
+      "name": "Acount"
+    },
+    {
+      "id": "2",
+      "name": "Finance"
+    },
+    {
+      "id": "3",
+      "name": "Report"
+    },
+    {
+      "id": "4",
+      "name": "Label"
+    }
+  ],
+  "menuItems": [
+    {
+      "id": "1",
+      "label": "Home",
+      "link": "/",
+      "order": 0,
+      "moduleType": "1"
+    },
+    {
+      "id": "2",
+      "label": "About",
+      "link": "/about",
+      "order": 1,
+      "moduleType": "1"
+    },
+    {
+      "id": "3",
+      "label": "Blog",
+      "link": "/blog",
+      "order": 2,
+      "moduleType": "1"
+    },
+    {
+      "id": "4",
+      "label": "Products",
+      "link": "/products",
+      "order": 3,
+      "moduleType": "1"
+    },
+    {
+      "id": "5",
+      "label": "Latest",
+      "link": "/blog/latest",
+      "parentId": "3",
+      "order": 0,
+      "moduleType": "1"
+    },
+    {
+      "id": "6",
+      "label": "Categories",
+      "link": "/blog/categories",
+      "parentId": "3",
+      "order": 1,
+      "moduleType": "1"
+    },
+    {
+      "id": "7",
+      "label": "BS Layout",
+      "link": "/bs_layout1",
+      "order": 4,
+      "moduleType": "1"
+    }
+  ],
+  "settings": [
+    {
+      "id": "1",
+      "general": {
+        "siteName": "CTSC Navigator",
+        "siteUrl": "https://example.com",
+        "adminEmail": "admin@example.com",
+        "maintenanceMode": false
+      },
+      "appearance": {
+        "theme": "light",
+        "primaryColor": "#9b87f5",
+        "logo": ""
+      },
+      "api": {
+        "apiKey": "api_1234567890abcdef1234567890abcdef",
+        "enabled": true,
+        "allowedOrigins": [
+          "https://example.com",
+          "https://app.example.com"
+        ]
+      }
+    }
+  ],
+  "content": [],
+  "bs_layout1": [
+    {
+      "nGrp_Order": 1,
+      "sGrp_Code": "201",
+      "sGrp_Description": "BALANCE SHEET ",
+      "sGrp_Type": "PT",
+      "sTotal_Type": "",
+      "sFormula": "",
+      "sSchedule": "",
+      "sSubGroup": ""
+    }
+  ]
+}
