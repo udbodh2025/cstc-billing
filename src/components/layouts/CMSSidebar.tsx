@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useApp } from '@/contexts/AppContext';
+import * as Icons from 'lucide-react';
 
 export default function CMSSidebar() {
   const { user, logout, hasPermission } = useAuth();
@@ -33,43 +35,48 @@ export default function CMSSidebar() {
     logout();
     navigate("/login");
   };
+    // Dynamic icon component lookup
+    const getIcon = (iconName: string) => {
+      const LucideIcon = (Icons as any)[iconName.charAt(0).toUpperCase() + iconName.slice(1)] || Icons.File;
+      return <LucideIcon size={20} />;
+    };
 
-  // Main navigation items
-  const navigationItems = [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: LayoutDashboard,
-      requiredRole: "viewer" as const,
-    },
-    {
-      title: "Content Types",
-      url: "/content-types",
-      icon: FileText,
-      requiredRole: "editor" as const,
-    },
-    {
-      title: "Menu Builder",
-      url: "/menu-builder",
-      icon: Menu,
-      requiredRole: "editor" as const,
-    },
-    {
-      title: "Users",
-      url: "/users",
-      icon: Users,
-      requiredRole: "admin" as const,
-    },
-    {
-      title: "Settings",
-      url: "/settings",
-      icon: Settings,
-      requiredRole: "admin" as const,
-    },
-  ];
-
+  // // Main navigation items
+  // const navigationItems = [
+  //   {
+  //     title: "Dashboard",
+  //     url: "/dashboard",
+  //     icon: LayoutDashboard,
+  //     requiredRole: "viewer" as const,
+  //   },
+  //   {
+  //     title: "Content Types",
+  //     url: "/content-types",
+  //     icon: FileText,
+  //     requiredRole: "editor" as const,
+  //   },
+  //   {
+  //     title: "Menu Builder",
+  //     url: "/menu-builder",
+  //     icon: Menu,
+  //     requiredRole: "editor" as const,
+  //   },
+  //   {
+  //     title: "Users",
+  //     url: "/users",
+  //     icon: Users,
+  //     requiredRole: "admin" as const,
+  //   },
+  //   {
+  //     title: "Settings",
+  //     url: "/settings",
+  //     icon: Settings,
+  //     requiredRole: "admin" as const,
+  //   },
+  // ];
+  const navigationItems = useApp();
   // Filter navigation items based on user role
-  const filteredNavigationItems = navigationItems.filter(item => 
+  const filteredNavigationItems = navigationItems.menuItems.filter(item => 
     hasPermission(item.requiredRole)
   );
 
@@ -105,14 +112,14 @@ export default function CMSSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {filteredNavigationItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url} onClick={(e) => {
+                    <a href={item.link} onClick={(e) => {
                       e.preventDefault();
-                      navigate(item.url);
+                      navigate(item.link);
                     }}>
-                      <item.icon className="h-5 w-5" />
-                      <span>{item.title}</span>
+                      <span className="mr-3">{getIcon(item.icon)}</span>
+                      <span>{item.id}</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

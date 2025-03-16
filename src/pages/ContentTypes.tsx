@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { PlusCircle, Edit, Trash2, FileText } from "lucide-react";
+import { PlusCircle, Edit, Trash2, FileText, Database, List } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
@@ -25,13 +25,15 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "@/hooks/use-toast";
-import { ContentType, contentTypesApi } from "@/lib/api";
+import { ContentType } from "@/types";
+import { contentTypesApi } from "@/lib/api";
 
 export default function ContentTypes() {
   const navigate = useNavigate();
   const [contentTypes, setContentTypes] = useState<ContentType[]>([]);
   const [loading, setLoading] = useState(true);
   const [contentTypeToDelete, setContentTypeToDelete] = useState<ContentType | null>(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>('table'); // Default to table view
 
   useEffect(() => {
     fetchContentTypes();
@@ -89,7 +91,26 @@ export default function ContentTypes() {
           icon: <PlusCircle className="h-4 w-4" />,
         }}
       />
-
+       <div className="flex items-center rounded-md border p-1">
+            <Button 
+              variant={viewMode === 'grid' ? 'default' : 'ghost'} 
+              size="sm" 
+              className="size-8 p-0"
+              onClick={() => setViewMode('grid')}
+            >
+              <Database className="h-4 w-4" />
+              <span className="sr-only">Grid view</span>
+            </Button>
+            <Button 
+              variant={viewMode === 'table' ? 'default' : 'ghost'} 
+              size="sm" 
+              className="size-8 p-0"
+              onClick={() => setViewMode('table')}
+            >
+              <List className="h-4 w-4" />
+              <span className="sr-only">Table view</span>
+            </Button>
+          </div>
       {contentTypes.length === 0 ? (
         <EmptyState
           title="No content types found"

@@ -9,8 +9,11 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-import { ContentType, Field, contentTypesApi } from "@/lib/api";
+import { ContentType, Field} from "@/types";
+import { contentTypesApi } from "@/lib/api";
 import { v4 as uuidv4 } from "uuid";
+import fs from 'fs/promises';
+import path from 'path';
 
 interface ContentTypeFormProps {
   contentType?: ContentType;
@@ -130,14 +133,25 @@ export default function ContentTypeForm({ contentType: propContentType, onSucces
         fields,
       };
       
+      let savedContentType;
       if (contentType && contentType.id) {
-        await contentTypesApi.update(contentType.id, contentTypeData);
+        savedContentType = await contentTypesApi.update(contentType.id, contentTypeData);
         toast({
           title: "Success",
           description: `Content type "${name}" has been updated`,
         });
       } else {
-        await contentTypesApi.create(contentTypeData as any);
+        savedContentType = await contentTypesApi.create(contentTypeData as any);
+        
+        // Generate API endpoints
+        await generateApiEndpoints(savedContentType);
+        
+        // Generate component
+        await generateComponent(savedContentType);
+        
+        // Update menu items
+        await updateMenu(savedContentType);
+        
         toast({
           title: "Success",
           description: `Content type "${name}" has been created`,
@@ -314,3 +328,106 @@ export default function ContentTypeForm({ contentType: propContentType, onSucces
     </form>
   );
 }
+
+// Helper functions for code generation
+const generateApiEndpoints = async (contentType: ContentType) => {
+  const apiTemplate = `
+import { api } from '@/lib/axios';
+import { ${contentType.name} } from '@/types';
+
+export const ${contentType.slug}Api = {
+  getAll: async () => {
+    const response = await api.get<${contentType.name}[]>('/${contentType.slug}');
+    return response.data;
+  },
+  
+  getById: async (id: string) => {
+    const response = await api.get<${contentType.name}>(\`/${contentType.slug}/\${id}\`);
+    return response.data;
+  },
+  
+  create: async (data: Omit<${contentType.name}, 'id'>) => {
+    const response = await api.post<${contentType.name}>('/${contentType.slug}', data);
+    return response.data;
+  },
+  
+  update: async (id: string, data: Partial<${contentType.name}>) => {
+    const response = await api.patch<${contentType.name}>(\`/${contentType.slug}/\${id}\`, data);
+    return response.data;
+  },
+  
+  delete: async (id: string) => {
+    await api.delete(\`/${contentType.slug}/\${id}\`);
+  },
+};`;
+
+  // Write to api.ts
+  await fs.appendFile(
+    path.join(process.cwd(), 'src/lib/api.ts'),
+    apiTemplate
+  );
+};
+
+const generateComponent = async (contentType: ContentType) => {
+  const componentTemplate = `
+import { useState, useEffect } from 'react';
+import { ${contentType.slug}Api } from '@/lib/api';
+import { ${contentType.name} } from '@/types';
+import { DataTable } from '@/components/ui/data-table';
+import { columns } from './${contentType.slug}-columns';
+
+export default function ${contentType.name}List() {
+  const [data, setData] = useState<${contentType.name}[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      const items = await ${contentType.slug}Api.getAll();
+      setData(items);
+    } catch (error) {
+      console.error('Error loading ${contentType.name}:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div>
+      <h1>${contentType.name} List</h1>
+      <DataTable columns={columns} data={data} />
+    </div>
+  );
+}`;
+
+  // Create component directory and file
+  const componentDir = path.join(process.cwd(), `src/components/${contentType.slug}`);
+  await fs.mkdir(componentDir, { recursive: true });
+  await fs.writeFile(
+    path.join(componentDir, `${contentType.slug}-list.tsx`),
+    componentTemplate
+  );
+};
+
+const updateMenu = async (contentType: ContentType) => {
+  // Add to navigation menu
+  const menuItem = {
+    title: contentType.name,
+    href: `/${contentType.slug}`,
+    icon: 'Layout', // Default icon, can be customized
+  };
+
+  // Update your menu configuration
+  // This depends on how you manage your menu items
+  // Example: updating a menu.ts file
+  const menuPath = path.join(process.cwd(), 'src/config/menu.ts');
+  const menuContent = await fs.readFile(menuPath, 'utf-8');
+  const updatedMenuContent = menuContent.replace(
+    'export const menuItems = [',
+    `export const menuItems = [\n  ${JSON.stringify(menuItem)},`
+  );
+  await fs.writeFile(menuPath, updatedMenuContent);
+};
