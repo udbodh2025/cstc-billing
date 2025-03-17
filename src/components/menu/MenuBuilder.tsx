@@ -7,8 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-import { MenuItem, menuItemsApi, ContentType, contentTypesApi } from "@/lib/api";
+import { menuItemsApi, contentTypesApi } from "@/lib/api";
+import { MenuItem, ContentType} from "@/types"
 import { v4 as uuidv4 } from "uuid";
+import { useApp } from "@/contexts/AppContext";
 
 export default function MenuBuilder() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -121,6 +123,8 @@ export default function MenuBuilder() {
     setMenuItems(menuItems.filter(item => !idsToRemove.has(item.id)));
   };
 
+  const { menuItems: contextMenuItems, updateMenuItem: updateContextMenuItem, deleteMenuItem, addMenuItem: addContextMenuItem } = useApp();
+
   const saveMenu = async () => {
     setSaving(true);
     console.log("Saving menu items:", menuItems);
@@ -134,6 +138,7 @@ export default function MenuBuilder() {
       for (const item of existingItems) {
         if (!currentIds.has(item.id)) {
           await menuItemsApi.delete(item.id);
+          deleteMenuItem(item.id);
         }
       }
       
@@ -143,8 +148,10 @@ export default function MenuBuilder() {
         
         if (exists) {
           await menuItemsApi.update(item.id, item);
+          updateContextMenuItem(item);
         } else {
-          await menuItemsApi.create(item);
+          const newItem = await menuItemsApi.create(item);
+          addContextMenuItem(newItem);
         }
       }
       
@@ -209,9 +216,22 @@ export default function MenuBuilder() {
     );
   }
 
+  // Get the nesting level of a menu item
+  const getItemLevel = (item: MenuItem): number => {
+    let level = 0;
+    let currentItem = item;
+    
+    while (currentItem.parentId) {
+      level++;
+      currentItem = menuItems.find(i => i.id === currentItem.parentId) || currentItem;
+    }
+    
+    return level;
+  };
+
   // Render menu items and their children
-  const renderMenuItem = (item: MenuItem, isChild: boolean = false) => (
-    <div key={item.id} className={`mb-4 ${isChild ? 'ml-8' : ''}`}>
+  const renderMenuItem = (item: MenuItem, level: number = 0) => (
+    <div key={item.id} className={`mb-4 ${level > 0 ? 'pl-' + (level * 16) + 'px' : ''}`}>
       <div className="flex items-stretch mb-2">
         <div className="bg-muted p-3 flex items-center rounded-l-md">
           <GripVertical className="h-5 w-5 text-muted-foreground" />
@@ -257,7 +277,7 @@ export default function MenuBuilder() {
               >
                 ↓
               </Button>
-              {!isChild && (
+              {level < 4 && (
                 <Button
                   type="button"
                   variant="outline"
@@ -347,12 +367,30 @@ export default function MenuBuilder() {
           </div>
         ) : (
           <div>
-            {parentItems.map(item => (
-              <div key={item.id}>
-                {renderMenuItem(item)}
-                {getChildItems(item.id).map(child => renderMenuItem(child, true))}
-              </div>
-            ))}
+            {parentItems.map(item => {
+              const renderChildren = (parentItem: MenuItem, currentLevel: number) => {
+                if (currentLevel >= 5) return null;
+                const children = getChildItems(parentItem.id);
+                return children.length > 0 ? (
+                  <div className="border-l-2 border-muted ml-4">
+                    {children.map(child => (
+                      <div key={child.id} className="relative">
+                        <div className="absolute w-4 h-px bg-muted top-1/2 -left-4"></div>
+                        {renderMenuItem(child, currentLevel)}
+                        {renderChildren(child, currentLevel + 1)}
+                      </div>
+                    ))}
+                  </div>
+                ) : null;
+              };
+              
+              return (
+                <div key={item.id} className="relative">
+                  {renderMenuItem(item, 0)}
+                  {renderChildren(item, 1)}
+                </div>
+              );
+            })}
           </div>
         )}
       </CardContent>

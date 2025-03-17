@@ -141,17 +141,7 @@ export default function ContentTypeForm({ contentType: propContentType, onSucces
           description: `Content type "${name}" has been updated`,
         });
       } else {
-        savedContentType = await contentTypesApi.create(contentTypeData as any);
-        
-        // Generate API endpoints
-        await generateApiEndpoints(savedContentType);
-        
-        // Generate component
-        await generateComponent(savedContentType);
-        
-        // Update menu items
-        await updateMenu(savedContentType);
-        
+        savedContentType = await contentTypesApi.create(contentTypeData);
         toast({
           title: "Success",
           description: `Content type "${name}" has been created`,

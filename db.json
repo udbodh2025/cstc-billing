@@ -103,37 +103,19 @@
       "updatedAt": "2023-03-15T00:00:00.000Z"
     },
     {
-      "id": "6d6c",
+      "id": "d378",
       "name": "Test1",
       "slug": "test1",
       "fields": [
         {
-          "id": "c26d62bc-1ad1-4be4-b03c-35db4cda19bb",
-          "name": "Test-1",
-          "type": "text",
+          "id": "e963ec69-47c9-4f14-8384-a7a4d1867d6d",
+          "name": "Test",
+          "type": "textarea",
           "required": false
         }
       ],
-      "createdAt": "2025-03-16T10:42:18.369Z",
-      "updatedAt": "2025-03-16T10:42:18.369Z"
-    },
-    {
-      "id": "ac8afecc-ae05-4c5f-807e-5abc343c4c31",
-      "name": "Editor",
-      "fields": [
-        {
-          "name": "w",
-          "type": "text",
-          "required": false,
-          "id": "48feca73-b670-4bc0-bb3e-5a699128d10c"
-        },
-        {
-          "name": "w",
-          "type": "text",
-          "required": false,
-          "id": "1bafb72f-5f53-44da-8cdf-f7a1dff2abcd"
-        }
-      ]
+      "createdAt": "2025-03-17T09:13:48.538Z",
+      "updatedAt": "2025-03-17T09:13:48.538Z"
     }
   ],
   "menuModules": [
@@ -200,72 +182,38 @@
       "moduleType": "1"
     },
     {
-      "id": "7",
-      "label": "BS Layout",
-      "link": "/bs_layout1",
-      "order": 4,
-      "moduleType": "1"
-    },
-    {
-      "id": "0e84074f-8d4f-46ac-ac30-40f0c889fae9",
-      "label": "Pl Layout",
-      "link": "/pl-layout",
-      "order": 5
-    },
-    {
-      "id": "4973985a-cd76-4a10-a95e-d703289bec5d",
-      "label": "Account",
-      "path": "/account",
-      "icon": "file-text",
-      "contentTypeId": null
-    },
-    {
-      "id": "2e97e834-f421-4d12-9403-800d47b26f97",
-      "label": "Test111",
-      "path": "/test111",
-      "icon": "file-text",
-      "contentTypeId": null
-    },
-    {
-      "id": "097add5c-cb75-4036-84cd-5021a784595a",
-      "label": "Future",
-      "path": "/future",
-      "icon": "file-text",
-      "contentTypeId": null
-    },
-    {
-      "id": "0d974d15-7a02-44a4-80ad-69d1238e2b14",
-      "label": "Udbodh",
-      "path": "/udbodh",
-      "icon": "file-text",
-      "contentTypeId": null
-    },
-    {
-      "id": "ee631cc8-3a15-4296-9518-2ad57ef9915f",
+      "id": "e21feca8-0c27-4bd8-ab13-a5fb8f6b788c",
       "label": "Test1",
       "link": "/test1",
-      "order": null
+      "order": 4
     },
     {
-      "id": "38e9b82f-3579-46e6-8e60-40634f05b8e7",
-      "label": "rest",
-      "path": "/rest",
-      "icon": "file-text",
-      "contentTypeId": null
+      "id": "15d09680-dc07-46ed-9474-1f862ca9829d",
+      "label": "a",
+      "link": "#",
+      "order": 0,
+      "parentId": "e21feca8-0c27-4bd8-ab13-a5fb8f6b788c"
     },
     {
-      "id": "909eaf70-da8f-486c-a110-b8d288f827bf",
-      "label": "dda",
-      "path": "/dda",
-      "icon": "file-text",
-      "contentTypeId": null
+      "id": "b9397df6-d518-4509-830c-278b1fe4df03",
+      "label": "b",
+      "link": "#",
+      "order": 1,
+      "parentId": "e21feca8-0c27-4bd8-ab13-a5fb8f6b788c"
     },
     {
-      "id": "7b994c8d-7af8-4ddc-ad0b-8163ff1eb9f4",
-      "label": "Editor",
-      "path": "/editor",
-      "icon": "file-text",
-      "contentTypeId": "ac8afecc-ae05-4c5f-807e-5abc343c4c31"
+      "id": "d3ac2ee4-302b-42e0-9a80-591830b13271",
+      "label": "c",
+      "link": "#",
+      "order": 0,
+      "parentId": "15d09680-dc07-46ed-9474-1f862ca9829d"
+    },
+    {
+      "id": "c5d3060e-cb9a-4fff-b216-5a9c40023b59",
+      "label": "d",
+      "link": "#",
+      "order": 0,
+      "parentId": "d3ac2ee4-302b-42e0-9a80-591830b13271"
     }
   ],
   "settings": [
@@ -283,7 +231,7 @@
         "logo": ""
       },
       "api": {
-        "apiKey": "api_1234567890abcdef1234567890abcdef",
+        "apiKey": "api_3ed30b6e6c5c4e21865c60e8267fbeb9",
         "enabled": true,
         "allowedOrigins": [
           "https://example.com",

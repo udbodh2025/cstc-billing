@@ -21,6 +21,7 @@ import UserForm from "@/components/users/UserForm";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
 import { useAuth } from "@/contexts/AuthContext";
+import DynamicContent from "@/pages/DynamicContent";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -83,7 +84,7 @@ const App = () => (
                 } />
                 
                 <Route path="menu-builder" element={<MenuBuilderPage />} />
-                
+                <Route path="/:contentTypeName" element={<DynamicContent />} />
                 <Route path="users" element={<Users />} />
                 <Route path="users/create" element={
                   <div className="max-w-4xl mx-auto">
