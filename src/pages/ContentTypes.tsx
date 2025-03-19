@@ -91,26 +91,7 @@ export default function ContentTypes() {
           icon: <PlusCircle className="h-4 w-4" />,
         }}
       />
-       <div className="flex items-center rounded-md border p-1">
-            <Button 
-              variant={viewMode === 'grid' ? 'default' : 'ghost'} 
-              size="sm" 
-              className="size-8 p-0"
-              onClick={() => setViewMode('grid')}
-            >
-              <Database className="h-4 w-4" />
-              <span className="sr-only">Grid view</span>
-            </Button>
-            <Button 
-              variant={viewMode === 'table' ? 'default' : 'ghost'} 
-              size="sm" 
-              className="size-8 p-0"
-              onClick={() => setViewMode('table')}
-            >
-              <List className="h-4 w-4" />
-              <span className="sr-only">Table view</span>
-            </Button>
-          </div>
+      
       {contentTypes.length === 0 ? (
         <EmptyState
           title="No content types found"
