@@ -310,15 +310,12 @@ export default function MenuBuilder() {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Menu Builder</CardTitle>
-      </CardHeader>
+    
       <CardContent>
         <div className="flex flex-col space-y-4 mb-6">
             <div className="flex justify-between items-end">
              <div className="space-y-2 flex-1 mr-2">
-               <Label htmlFor="content-type-select">Add Content Type to Menu</Label>
-               <Select
+             <Select
                  value={selectedContentType}
                  onValueChange={setSelectedContentType}
                >
