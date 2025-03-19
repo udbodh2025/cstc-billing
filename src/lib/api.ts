@@ -1,6 +1,6 @@
 
 import { toast } from "@/hooks/use-toast";
-import {User, ContentType, MenuModule, MenuItem, Content, Settings } from "@/types";
+import {User, ContentType, MenuModule, MenuItem, ContentItem, Settings } from "@/types";
 // Base API URL for JSON Server
 const API_URL = "http://localhost:3001";
 
@@ -128,7 +128,7 @@ export const contentApi = {
   getAll: (contentTypeId: string) => 
     fetchWithErrorHandling(`${API_URL}/content?contentTypeId=${contentTypeId}`),
   getById: (id: string) => fetchWithErrorHandling(`${API_URL}/content/${id}`),
-  create: (content: Omit<Content, "id">) => 
+  create: (content: Omit<ContentItem, "id">) => 
     fetchWithErrorHandling(`${API_URL}/content`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -138,7 +138,7 @@ export const contentApi = {
         updatedAt: new Date().toISOString(),
       }),
     }),
-  update: (id: string, content: Partial<Content>) => 
+  update: (id: string, content: Partial<ContentItem>) => 
     fetchWithErrorHandling(`${API_URL}/content/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
