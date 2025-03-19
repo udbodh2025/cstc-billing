@@ -14,12 +14,12 @@ export interface ContentType {
   name: string;
   slug: string;
   icon?: string;
-  fields: Field[];
+  fields: ContentField[];
   createdAt: string;
   updatedAt: string;
 }
 
-export interface Field {
+export interface ContentField {
   id: string;
   name: string;
   type: "text" | "textarea" | "number" | "boolean" | "date" | "select" | "image" | "relation";
@@ -47,7 +47,7 @@ export interface MenuModule {
 }
 
 
-export interface Content {
+export interface ContentItem {
   id: string;
   contentTypeId: string;
   [key: string]: any;

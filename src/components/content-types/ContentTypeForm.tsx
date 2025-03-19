@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-import { ContentType, Field} from "@/types";
+import { ContentType, ContentField} from "@/types";
 import { contentTypesApi } from "@/lib/api";
 import { v4 as uuidv4 } from "uuid";
 import fs from 'fs/promises';
@@ -42,7 +42,7 @@ export default function ContentTypeForm({ contentType: propContentType, onSucces
   const [name, setName] = useState(contentType?.name || "");
   const [slug, setSlug] = useState(contentType?.slug || "");
   const [icon, setIcon] = useState(contentType?.icon || "Layout");
-  const [fields, setFields] = useState<Field[]>(contentType?.fields || []);
+  const [fields, setFields] = useState<ContentField[]>(contentType?.fields || []);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const iconOptions = Object.keys(Icons)
@@ -82,7 +82,7 @@ export default function ContentTypeForm({ contentType: propContentType, onSucces
   };
 
   const addField = () => {
-    const newField: Field = {
+    const newField: ContentField = {
       id: uuidv4(),
       name: "",
       type: "text",
@@ -91,7 +91,7 @@ export default function ContentTypeForm({ contentType: propContentType, onSucces
     setFields([...fields, newField]);
   };
 
-  const updateField = (id: string, updates: Partial<Field>) => {
+  const updateField = (id: string, updates: Partial<ContentField>) => {
     setFields(fields.map(field => 
       field.id === id ? { ...field, ...updates } : field
     ));
@@ -260,7 +260,7 @@ export default function ContentTypeForm({ contentType: propContentType, onSucces
                             <Select
                               value={field.type}
                               onValueChange={(value) => updateField(field.id, { 
-                                type: value as Field["type"] 
+                                type: value as ContentField["type"] 
                               })}
                             >
                               <SelectTrigger id={`field-type-${field.id}`}>

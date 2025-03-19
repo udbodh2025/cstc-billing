@@ -101,6 +101,22 @@
       ],
       "createdAt": "2023-03-15T00:00:00.000Z",
       "updatedAt": "2023-03-15T00:00:00.000Z"
+    },
+    {
+      "id": "b1f5",
+      "name": "as",
+      "slug": "as",
+      "icon": "Layout",
+      "fields": [
+        {
+          "id": "5938bf7d-de08-4463-a7cb-7759760d6fa6",
+          "name": "Name",
+          "type": "text",
+          "required": false
+        }
+      ],
+      "createdAt": "2025-03-19T10:50:37.632Z",
+      "updatedAt": "2025-03-19T10:50:37.632Z"
     }
   ],
   "menuModules": [
@@ -135,6 +151,20 @@
       "label": "Product",
       "link": "/product",
       "order": 1
+    },
+    {
+      "id": "acee1e41-4c00-48b2-bcb0-744ca0236e7c",
+      "label": "as",
+      "path": "/as",
+      "icon": "file-text",
+      "contentTypeId": null
+    },
+    {
+      "id": "fe313a96-d5fb-419a-ab58-ebe6d8f66f9c",
+      "label": "Test",
+      "path": "/test",
+      "icon": "file-text",
+      "contentTypeId": null
     }
   ],
   "settings": [

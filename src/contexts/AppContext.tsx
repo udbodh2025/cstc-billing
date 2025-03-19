@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { ContentType, Field, Content, ApiEndpoint, MenuItem } from "@/types";
+import { ContentType, ContentField, ContentItem, ApiEndpoint, MenuItem } from "@/types";
 import { LayoutDashboard, Users, Settings, FileText, Menu } from "lucide-react";
 
 import { v4 as uuidv4 } from 'uuid';
@@ -7,14 +7,14 @@ import { toast } from 'sonner';
 
 interface AppContextType {
   contentTypes: ContentType[];
-  contentItems: Content[];
+  contentItems: ContentItem[];
   apiEndpoints: ApiEndpoint[];
   menuItems: MenuItem[];
   addContentType: (contentType: Omit<ContentType, 'id'>) => void;
   updateContentType: (contentType: ContentType) => void;
   deleteContentType: (id: string) => void;
-  addContentItem: (contentItem: Omit<Content, 'id'>) => void;
-  updateContentItem: (contentItem: Content) => void;
+  addContentItem: (contentItem: Omit<ContentItem, 'id'>) => void;
+  updateContentItem: (contentItem: ContentItem) => void;
   deleteContentItem: (id: string) => void;
   addApiEndpoint: (apiEndpoint: Omit<ApiEndpoint, 'id'>) => void;
   updateApiEndpoint: (apiEndpoint: ApiEndpoint) => void;
@@ -28,7 +28,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [contentTypes, setContentTypes] = useState<ContentType[]>([]);
-  const [contentItems, setContentItems] = useState<Content[]>([]);
+  const [contentItems, setContentItems] = useState<ContentItem[]>([]);
   const [apiEndpoints, setApiEndpoints] = useState<ApiEndpoint[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItem[]>(  // Main navigation items
 [
@@ -170,14 +170,14 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setMenuItems(menuItems.filter(item => item.contentTypeId !== id));
   };
 
-  // Content Item operations
-  const addContentItem = async (contentItem: Omit<Content, 'id'>) => {
+  // ContentItem Item operations
+  const addContentItem = async (contentItem: Omit<ContentItem, 'id'>) => {
     try {
       if (!contentItem.contentTypeId) {
         throw new Error('Content Type ID is required');
       }
       
-      const newContentItem: Content = {
+      const newContentItem: ContentItem = {
         ...contentItem,
         id: uuidv4(),
         contentTypeId: ''
@@ -209,7 +209,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const updateContentItem = (contentItem: Content) => {
+  const updateContentItem = (contentItem: ContentItem) => {
     try {
       // Update in state
       setContentItems(contentItems.map(item => item.id === contentItem.id ? contentItem : item));
@@ -224,7 +224,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         const existingItems = JSON.parse(localStorage.getItem(storageKey) || '[]');
         
         // Update the item in the array
-        const updatedItems = existingItems.map((item: Content) => 
+        const updatedItems = existingItems.map((item: ContentItem) => 
           item.id === contentItem.id ? contentItem : item
         );
         
@@ -259,7 +259,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
           const existingItems = JSON.parse(localStorage.getItem(storageKey) || '[]');
           
           // Remove the item from the array
-          const updatedItems = existingItems.filter((item: Content) => item.id !== id);
+          const updatedItems = existingItems.filter((item: ContentItem) => item.id !== id);
           
           // Save back to localStorage
           localStorage.setItem(storageKey, JSON.stringify(updatedItems));

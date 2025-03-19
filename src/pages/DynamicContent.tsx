@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { ContentType, Field, Content } from "@/types";
+import { ContentType, ContentField, ContentItem } from "@/types";
 import { Textarea } from "@/components/ui/textarea";
 
 const DynamicContent = () => {
@@ -21,9 +21,9 @@ const DynamicContent = () => {
   const { contentTypes, contentItems, addContentItem, updateContentItem, deleteContentItem } = useApp();
   
   const [contentType, setContentType] = useState<ContentType | null>(null);
-  const [items, setItems] = useState<Content[]>([]);
+  const [items, setItems] = useState<ContentItem[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [currentItem, setCurrentItem] = useState<Content | null>(null);
+  const [currentItem, setCurrentItem] = useState<ContentItem | null>(null);
 
   // Find the content type and its items
   useEffect(() => {
@@ -47,7 +47,7 @@ const DynamicContent = () => {
         if (storedItems.length > 0) {
           // Merge with state items, avoiding duplicates
           const allItems = [...typeItems];
-          storedItems.forEach((storedItem: Content) => {
+          storedItems.forEach((storedItem: ContentItem) => {
             if (!allItems.some(item => item.id === storedItem.id)) {
               allItems.push(storedItem);
             }
@@ -61,7 +61,7 @@ const DynamicContent = () => {
   }, [contentTypeName, contentTypes, contentItems]);
 
   // Create form schema dynamically based on content type fields
-  const createFormSchema = (fields: Field[]) => {
+  const createFormSchema = (fields: ContentField[]) => {
     const schemaObj: Record<string, any> = {};
     
     fields?.forEach(field => {
@@ -140,7 +140,7 @@ const DynamicContent = () => {
       }
     };
 
-    const renderFieldInput = (field: Field, formField: any) => {
+    const renderFieldInput = (field: ContentField, formField: any) => {
       if (field.type === 'text' && field.name.toLowerCase().includes('description')) {
         return (
           <Textarea
@@ -194,7 +194,7 @@ const DynamicContent = () => {
     );
   };
 
-  const handleDelete = (item: Content) => {
+  const handleDelete = (item: ContentItem) => {
     if (window.confirm(`Are you sure you want to delete this item?`)) {
       deleteContentItem(item.id);
       setItems(items.filter(i => i.id !== item.id));
@@ -204,7 +204,7 @@ const DynamicContent = () => {
         const storageKey = `contentItems_${contentTypeName.toLowerCase()}`;
         try {
           const storedItems = JSON.parse(localStorage.getItem(storageKey) || '[]');
-          const updatedItems = storedItems.filter((i: Content) => i.id !== item.id);
+          const updatedItems = storedItems.filter((i: ContentItem) => i.id !== item.id);
           localStorage.setItem(storageKey, JSON.stringify(updatedItems));
         } catch (error) {
           console.error('Error updating localStorage:', error);
@@ -215,7 +215,7 @@ const DynamicContent = () => {
     }
   };
 
-  const handleEdit = (item: Content) => {
+  const handleEdit = (item: ContentItem) => {
     setCurrentItem(item);
     setIsDialogOpen(true);
   };
