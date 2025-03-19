@@ -101,43 +101,6 @@
       ],
       "createdAt": "2023-03-15T00:00:00.000Z",
       "updatedAt": "2023-03-15T00:00:00.000Z"
-    },
-    {
-      "id": "d378",
-      "name": "Test1",
-      "slug": "test1",
-      "fields": [
-        {
-          "id": "e963ec69-47c9-4f14-8384-a7a4d1867d6d",
-          "name": "Test",
-          "type": "textarea",
-          "required": false
-        }
-      ],
-      "createdAt": "2025-03-17T09:13:48.538Z",
-      "updatedAt": "2025-03-17T09:13:48.538Z"
-    },
-    {
-      "id": "e414",
-      "name": "Area",
-      "slug": "area",
-      "icon": "Layout",
-      "fields": [
-        {
-          "id": "b030122a-78b3-4732-b790-c52aca8fe004",
-          "name": "Name",
-          "type": "text",
-          "required": false
-        },
-        {
-          "id": "1241d3ab-56db-459b-96a9-adc191ade5b1",
-          "name": "Description",
-          "type": "text",
-          "required": false
-        }
-      ],
-      "createdAt": "2025-03-19T05:17:17.391Z",
-      "updatedAt": "2025-03-19T05:17:17.391Z"
     }
   ],
   "menuModules": [
@@ -160,54 +123,18 @@
   ],
   "menuItems": [
     {
-      "id": "1",
-      "label": "Home",
-      "link": "/",
+      "id": "86d1be7b-f4d4-4364-a95d-eb50c4db8b53",
+      "label": "Blog Post",
+      "link": "/blog-post",
       "order": 0,
-      "moduleType": "1"
+      "icon": "FileText",
+      "requiredRole": "viewer"
     },
     {
-      "id": "2",
-      "label": "About",
-      "link": "/about",
-      "order": 1,
-      "moduleType": "1"
-    },
-    {
-      "id": "3",
-      "label": "Blog",
-      "link": "/blog",
-      "order": 2,
-      "moduleType": "1"
-    },
-    {
-      "id": "4",
-      "label": "Products",
-      "link": "/products",
-      "order": 3,
-      "moduleType": "1"
-    },
-    {
-      "id": "5",
-      "label": "Latest",
-      "link": "/blog/latest",
-      "parentId": "3",
-      "order": 0,
-      "moduleType": "1"
-    },
-    {
-      "id": "6",
-      "label": "Categories",
-      "link": "/blog/categories",
-      "parentId": "3",
-      "order": 1,
-      "moduleType": "1"
-    },
-    {
-      "id": "305bd480-f863-43a3-8759-fcb336657e1f",
-      "label": "Area",
-      "link": "/area",
-      "order": 5
+      "id": "61f6cbd0-9fab-4ac7-910c-009510ab17ea",
+      "label": "Product",
+      "link": "/product",
+      "order": 1
     }
   ],
   "settings": [

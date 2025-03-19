@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/ui/page-header";
 import { useAuth } from "@/contexts/AuthContext";
-import { ContentType, User, contentTypesApi, usersApi } from "@/lib/api";
+import { contentTypesApi, usersApi } from "@/lib/api";
+import { ContentType, User } from "@/types";
 import { BarChart, LineChart, CheckCircle, Clock, FileText, Users } from "lucide-react";
 
 export default function Dashboard() {
