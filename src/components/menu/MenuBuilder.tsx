@@ -231,7 +231,7 @@ export default function MenuBuilder() {
 
   // Render menu items and their children
   const renderMenuItem = (item: MenuItem, level: number = 0) => (
-    <div key={item.id} className={`mb-4 ${level > 0 ? 'pl-' + (level * 16) + 'px' : ''}`}>
+    <div key={item.id} className={`mb-4 ml-${level * 8}`}>
       <div className="flex items-stretch mb-2">
         <div className="bg-muted p-3 flex items-center rounded-l-md">
           <GripVertical className="h-5 w-5 text-muted-foreground" />
@@ -310,12 +310,11 @@ export default function MenuBuilder() {
 
   return (
     <Card>
-    
-      <CardContent>
+           <CardContent>
         <div className="flex flex-col space-y-4 mb-6">
             <div className="flex justify-between items-end">
              <div className="space-y-2 flex-1 mr-2">
-             <Select
+               <Select
                  value={selectedContentType}
                  onValueChange={setSelectedContentType}
                >
@@ -368,21 +367,16 @@ export default function MenuBuilder() {
               const renderChildren = (parentItem: MenuItem, currentLevel: number) => {
                 if (currentLevel >= 5) return null;
                 const children = getChildItems(parentItem.id);
-                return children.length > 0 ? (
-                  <div className="border-l-2 border-muted ml-4">
-                    {children.map(child => (
-                      <div key={child.id} className="relative">
-                        <div className="absolute w-4 h-px bg-muted top-1/2 -left-4"></div>
-                        {renderMenuItem(child, currentLevel)}
-                        {renderChildren(child, currentLevel + 1)}
-                      </div>
-                    ))}
+                return children.map(child => (
+                  <div key={child.id}>
+                    {renderMenuItem(child, currentLevel)}
+                    {renderChildren(child, currentLevel + 1)}
                   </div>
-                ) : null;
+                ));
               };
               
               return (
-                <div key={item.id} className="relative">
+                <div key={item.id}>
                   {renderMenuItem(item, 0)}
                   {renderChildren(item, 1)}
                 </div>

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PlusCircle, Trash2, GripVertical, X, Save } from "lucide-react";
+import * as Icons from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,8 +41,13 @@ export default function ContentTypeForm({ contentType: propContentType, onSucces
   
   const [name, setName] = useState(contentType?.name || "");
   const [slug, setSlug] = useState(contentType?.slug || "");
+  const [icon, setIcon] = useState(contentType?.icon || "Layout");
   const [fields, setFields] = useState<Field[]>(contentType?.fields || []);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const iconOptions = Object.keys(Icons)
+    .filter(key => typeof Icons[key as keyof typeof Icons] === 'function')
+    .filter(key => key !== 'default');
 
   // Fetch content type if we have an ID but no content type data
   useEffect(() => {
@@ -57,6 +63,7 @@ export default function ContentTypeForm({ contentType: propContentType, onSucces
       setContentType(data);
       setName(data.name);
       setSlug(data.slug);
+      setIcon(data.icon || "Layout");
       setFields(data.fields);
     } catch (error) {
       console.error("Error fetching content type:", error);
@@ -130,6 +137,7 @@ export default function ContentTypeForm({ contentType: propContentType, onSucces
       const contentTypeData = {
         name,
         slug,
+        icon,
         fields,
       };
       
@@ -200,6 +208,7 @@ export default function ContentTypeForm({ contentType: propContentType, onSucces
                 required
               />
             </div>
+           
           </div>
 
           <div>

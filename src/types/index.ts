@@ -13,6 +13,7 @@ export interface ContentType {
   id: string;
   name: string;
   slug: string;
+  icon?: string;
   fields: Field[];
   createdAt: string;
   updatedAt: string;

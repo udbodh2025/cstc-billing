@@ -116,6 +116,28 @@
       ],
       "createdAt": "2025-03-17T09:13:48.538Z",
       "updatedAt": "2025-03-17T09:13:48.538Z"
+    },
+    {
+      "id": "e414",
+      "name": "Area",
+      "slug": "area",
+      "icon": "Layout",
+      "fields": [
+        {
+          "id": "b030122a-78b3-4732-b790-c52aca8fe004",
+          "name": "Name",
+          "type": "text",
+          "required": false
+        },
+        {
+          "id": "1241d3ab-56db-459b-96a9-adc191ade5b1",
+          "name": "Description",
+          "type": "text",
+          "required": false
+        }
+      ],
+      "createdAt": "2025-03-19T05:17:17.391Z",
+      "updatedAt": "2025-03-19T05:17:17.391Z"
     }
   ],
   "menuModules": [
@@ -182,38 +204,10 @@
       "moduleType": "1"
     },
     {
-      "id": "e21feca8-0c27-4bd8-ab13-a5fb8f6b788c",
-      "label": "Test1",
-      "link": "/test1",
-      "order": 4
-    },
-    {
-      "id": "15d09680-dc07-46ed-9474-1f862ca9829d",
-      "label": "a",
-      "link": "#",
-      "order": 0,
-      "parentId": "e21feca8-0c27-4bd8-ab13-a5fb8f6b788c"
-    },
-    {
-      "id": "b9397df6-d518-4509-830c-278b1fe4df03",
-      "label": "b",
-      "link": "#",
-      "order": 1,
-      "parentId": "e21feca8-0c27-4bd8-ab13-a5fb8f6b788c"
-    },
-    {
-      "id": "d3ac2ee4-302b-42e0-9a80-591830b13271",
-      "label": "c",
-      "link": "#",
-      "order": 0,
-      "parentId": "15d09680-dc07-46ed-9474-1f862ca9829d"
-    },
-    {
-      "id": "c5d3060e-cb9a-4fff-b216-5a9c40023b59",
-      "label": "d",
-      "link": "#",
-      "order": 0,
-      "parentId": "d3ac2ee4-302b-42e0-9a80-591830b13271"
+      "id": "305bd480-f863-43a3-8759-fcb336657e1f",
+      "label": "Area",
+      "link": "/area",
+      "order": 5
     }
   ],
   "settings": [
