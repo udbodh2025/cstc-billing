@@ -42,41 +42,41 @@ export default function CMSSidebar() {
     };
 
   // // Main navigation items
-  // const navigationItems = [
-  //   {
-  //     title: "Dashboard",
-  //     url: "/dashboard",
-  //     icon: LayoutDashboard,
-  //     requiredRole: "viewer" as const,
-  //   },
-  //   {
-  //     title: "Content Types",
-  //     url: "/content-types",
-  //     icon: FileText,
-  //     requiredRole: "editor" as const,
-  //   },
-  //   {
-  //     title: "Menu Builder",
-  //     url: "/menu-builder",
-  //     icon: Menu,
-  //     requiredRole: "editor" as const,
-  //   },
-  //   {
-  //     title: "Users",
-  //     url: "/users",
-  //     icon: Users,
-  //     requiredRole: "admin" as const,
-  //   },
-  //   {
-  //     title: "Settings",
-  //     url: "/settings",
-  //     icon: Settings,
-  //     requiredRole: "admin" as const,
-  //   },
-  // ];
-  const navigationItems = useApp();
+  const navigationItems = [
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: LayoutDashboard,
+      requiredRole: "viewer" as const,
+    },
+    {
+      title: "Content Types",
+      url: "/content-types",
+      icon: FileText,
+      requiredRole: "editor" as const,
+    },
+    {
+      title: "Menu Builder",
+      url: "/menu-builder",
+      icon: Menu,
+      requiredRole: "editor" as const,
+    },
+    {
+      title: "Users",
+      url: "/users",
+      icon: Users,
+      requiredRole: "admin" as const,
+    },
+    {
+      title: "Settings",
+      url: "/settings",
+      icon: Settings,
+      requiredRole: "admin" as const,
+    },
+  ];
+ // const navigationItems = useApp();
   // Filter navigation items based on user role
-  const filteredNavigationItems = navigationItems.menuItems.filter(item => 
+  const filteredNavigationItems = navigationItems.filter(item => 
     hasPermission(item.requiredRole)
   );
 
@@ -112,14 +112,14 @@ export default function CMSSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {filteredNavigationItems.map((item) => (
-                <SidebarMenuItem key={item.id}>
+                <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.link} onClick={(e) => {
+                    <a href={item.url} onClick={(e) => {
                       e.preventDefault();
-                      navigate(item.link);
+                      navigate(item.url);
                     }}>
-                      <span className="mr-3">{getIcon(item.icon)}</span>
-                      <span>{item.id}</span>
+                      <item.icon className="h-5 w-5" />
+                      <span>{item.title}</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
