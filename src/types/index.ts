@@ -12,11 +12,11 @@ export interface User {
 export interface ContentType {
   id: string;
   name: string;
-  slug: string;
+  slug?: string;
   icon?: string;
   fields: ContentField[];
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ContentField {
