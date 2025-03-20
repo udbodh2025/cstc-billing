@@ -1,4 +1,6 @@
 
+import { v4 as uuidv4 } from 'uuid';
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -38,22 +40,17 @@ const DynamicContent = () => {
       
       // Get the content items for this type
       const typeItems = contentItems.filter(item => item.contentTypeId === foundType.id);
-      setItems(typeItems);
       
-      // Also check localStorage for items specific to this content type
+      // Get items from localStorage
       const storageKey = `contentItems_${contentTypeName.toLowerCase()}`;
       try {
         const storedItems = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        if (storedItems.length > 0) {
-          // Merge with state items, avoiding duplicates
-          const allItems = [...typeItems];
-          storedItems.forEach((storedItem: ContentItem) => {
-            if (!allItems.some(item => item.id === storedItem.id)) {
-              allItems.push(storedItem);
-            }
-          });
-          setItems(allItems);
-        }
+        // Use only stored items that aren't in contentItems
+        const uniqueStoredItems = storedItems.filter((storedItem: ContentItem) => 
+          !typeItems.some(item => item.id === storedItem.id)
+        );
+        // Combine and set items
+        setItems([...typeItems, ...uniqueStoredItems]);
       } catch (error) {
         console.error('Error loading items from localStorage:', error);
       }
@@ -102,37 +99,44 @@ const DynamicContent = () => {
 
     const onSubmit = async (data: FormValues) => {
       try {
+        let updatedItem;
         if (currentItem) {
           // Update existing item
-          updateContentItem({
+          updatedItem = {
             ...currentItem,
             ...data
-          });
+          };
+          await updateContentItem(updatedItem);
+          toast.success('Item updated successfully');
         } else {
           // Create new item
-          await addContentItem({
-            contentTypeId: contentType.id,
-            ...data
-          });
-          
-          // Specifically save this item to localStorage for this content type
-          const storageKey = `contentItems_${contentTypeName?.toLowerCase()}`;
-          const storedItems = JSON.parse(localStorage.getItem(storageKey) || '[]');
-          const newItem = {
+          updatedItem = {
             id: uuidv4(),
             contentTypeId: contentType.id,
             ...data
           };
-          localStorage.setItem(storageKey, JSON.stringify([...storedItems, newItem]));
+          await addContentItem(updatedItem);
+          toast.success('Item created successfully');
+        }
+
+        // Update items state
+        setItems(currentItem
+          ? items.map(item => item.id === currentItem.id ? updatedItem : item)
+          : [...items, updatedItem]);
+        
+        // Update localStorage
+        if (contentTypeName) {
+          const storageKey = `contentItems_${contentTypeName.toLowerCase()}`;
+          localStorage.setItem(storageKey, JSON.stringify(
+            currentItem
+              ? items.map(item => item.id === currentItem.id ? updatedItem : item)
+              : [...items, updatedItem]
+          ));
         }
         
         setIsDialogOpen(false);
         setCurrentItem(null);
         form.reset();
-        
-        // Refresh items list
-        const updatedItems = contentItems.filter(item => item.contentTypeId === contentType.id);
-        setItems(updatedItems);
         
       } catch (error) {
         console.error('Error saving item:', error);
@@ -325,7 +329,4 @@ const DynamicContent = () => {
 };
 
 export default DynamicContent;
-function uuidv4() {
-  throw new Error('Function not implemented.');
-}
 

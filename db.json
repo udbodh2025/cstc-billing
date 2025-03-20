@@ -325,6 +325,32 @@
         }
       ],
       "createdAt": "2025-03-20T11:25:13.047Z"
+    },
+    {
+      "id": "b6c9d935-983d-4e10-a7ed-d92017bc6d45",
+      "name": "Test",
+      "slug": "test",
+      "fields": [
+        {
+          "name": "1",
+          "type": "text",
+          "required": false,
+          "id": "eac509d8-9861-4aea-8f35-101429c0f916"
+        },
+        {
+          "name": "2",
+          "type": "text",
+          "required": false,
+          "id": "54146ba8-4999-4c5d-ba38-3e74864dd471"
+        },
+        {
+          "name": "3",
+          "type": "text",
+          "required": false,
+          "id": "499a10a3-1ab2-4aff-91f4-17ba150b6e6a"
+        }
+      ],
+      "createdAt": "2025-03-20T11:49:48.375Z"
     }
   ],
   "menuModules": [
@@ -429,6 +455,13 @@
       "link": "/test",
       "icon": "FileText",
       "contentTypeId": "08a0c44a-d91f-47da-8896-85e9eb1f649d"
+    },
+    {
+      "id": "fd0e98d1-6a97-4815-a06c-883bf94f95c5",
+      "label": "Test",
+      "link": "/test",
+      "icon": "FileText",
+      "contentTypeId": "b6c9d935-983d-4e10-a7ed-d92017bc6d45"
     }
   ],
   "settings": [
