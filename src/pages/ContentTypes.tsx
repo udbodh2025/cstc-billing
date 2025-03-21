@@ -207,6 +207,7 @@ const ContentTypes = () => {
                             <SelectItem value="number">Number</SelectItem>
                             <SelectItem value="select">Select</SelectItem>
                             <SelectItem value="date">Date</SelectItem>
+                            <SelectItem value="datetime">Date & Time</SelectItem>
                             <SelectItem value="boolean">Boolean</SelectItem>
                             <SelectItem value="textarea">Text Area</SelectItem>
                           </SelectContent>

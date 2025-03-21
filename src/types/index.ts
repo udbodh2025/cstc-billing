@@ -22,7 +22,7 @@ export interface ContentType {
 export interface ContentField {
   id: string;
   name: string;
-  type: 'text' | 'number' | 'select' | 'date' | 'boolean' | 'textarea';
+  type: 'text' | 'number' | 'select' | 'date' | 'datetime' | 'boolean' | 'textarea';
   required: boolean;
   options?: string[];
 }

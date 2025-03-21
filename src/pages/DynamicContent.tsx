@@ -71,7 +71,7 @@ const DynamicContent = () => {
         }
       } else if (field.type === 'boolean') {
         schemaObj[field.name] = z.boolean().optional().default(false);
-      } else if (field.type === 'date') {
+      } else if (field.type === 'date' || field.type === 'datetime') {
         if (field.required) {
           schemaObj[field.name] = z.date({ required_error: `${field.name} is required` });
         } else {
@@ -283,6 +283,15 @@ const DynamicContent = () => {
                               <X className="h-5 w-5 text-red-500" />
                             )}
                           </div>
+                        ) : field.type === 'date' ? (
+                          new Date(item[field.name]).toLocaleString(undefined, {
+                            dateStyle: 'medium'
+                          })
+                        ) : field.type === 'datetime' ? (
+                          new Date(item[field.name]).toLocaleString(undefined, {
+                            dateStyle: 'medium',
+                            timeStyle: 'short'
+                          })
                         ) : (
                           item[field.name]
                         )}
