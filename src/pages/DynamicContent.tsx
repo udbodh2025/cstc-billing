@@ -71,6 +71,12 @@ const DynamicContent = () => {
         }
       } else if (field.type === 'boolean') {
         schemaObj[field.name] = z.boolean().optional().default(false);
+      } else if (field.type === 'date') {
+        if (field.required) {
+          schemaObj[field.name] = z.date({ required_error: `${field.name} is required` });
+        } else {
+          schemaObj[field.name] = z.date().optional();
+        }
       } else {
         if (field.required) {
           schemaObj[field.name] = z.string().min(1, { message: `${field.name} is required` });
@@ -102,12 +108,23 @@ const DynamicContent = () => {
 
     const onSubmit = async (data: FormValues) => {
       try {
+        // Convert date objects to ISO strings
+        const processedData = Object.entries(data).reduce((acc, [key, value]) => {
+          const field = contentType.fields.find(f => f.name === key);
+          if (field?.type === 'date' && value instanceof Date) {
+            acc[key] = value.toISOString();
+          } else {
+            acc[key] = value;
+          }
+          return acc;
+        }, {} as Record<string, any>);
+
         let updatedItem;
         if (currentItem) {
           // Update existing item
           updatedItem = {
             ...currentItem,
-            ...data
+            ...processedData
           };
           await updateContentItem(updatedItem);
           toast.success('Item updated successfully');
@@ -116,7 +133,7 @@ const DynamicContent = () => {
           updatedItem = {
             id: uuidv4(),
             contentTypeId: contentType.id,
-            ...data
+            ...processedData
           };
           await addContentItem(updatedItem);
           toast.success('Item created successfully');
