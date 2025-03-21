@@ -351,6 +351,119 @@
         }
       ],
       "createdAt": "2025-03-20T11:49:48.375Z"
+    },
+    {
+      "id": "382bbcc7-5359-4b76-8bfe-7def3910f1f9",
+      "name": "Article",
+      "slug": "article",
+      "fields": [
+        {
+          "name": "Name",
+          "type": "text",
+          "required": false,
+          "id": "f543dd64-db30-4d14-a225-7ca765c464c8"
+        },
+        {
+          "name": "Description",
+          "type": "text",
+          "required": false,
+          "id": "3f982188-7a86-4583-a080-32044c726d74"
+        },
+        {
+          "name": "Date",
+          "type": "date",
+          "required": false,
+          "id": "9e300a4f-4fe0-4477-b3b8-e3850f3af431"
+        }
+      ],
+      "createdAt": "2025-03-20T11:56:01.696Z"
+    },
+    {
+      "id": "860016ca-594c-4e8c-bdf0-59094240f1a9",
+      "name": "Test99",
+      "slug": "test99",
+      "fields": [
+        {
+          "name": "Name",
+          "type": "text",
+          "required": false,
+          "id": "9b9d59a7-969c-461c-84c2-4212bfb676d6"
+        },
+        {
+          "name": "Description",
+          "type": "textarea",
+          "required": false,
+          "id": "82e705fa-b213-4b17-84bf-46b904944977"
+        },
+        {
+          "name": "IsDelete",
+          "type": "boolean",
+          "required": false,
+          "id": "03c462a6-ccd7-4ed1-ae17-c1eabd0d822c"
+        }
+      ],
+      "createdAt": "2025-03-21T05:04:57.468Z"
+    },
+    {
+      "id": "f452b413-1cd0-402a-8bd7-fb028965a3fb",
+      "name": "Article",
+      "slug": "article",
+      "fields": [
+        {
+          "name": "Name",
+          "type": "text",
+          "required": false,
+          "id": "2f2a2f65-dd7f-466b-81da-fac2187ec874"
+        },
+        {
+          "name": "Description",
+          "type": "textarea",
+          "required": false,
+          "id": "386b3377-88c9-4f3b-b637-c906f33d2bc9"
+        },
+        {
+          "name": "Published",
+          "type": "boolean",
+          "required": false,
+          "id": "c1f79cfa-65e0-4380-9ab9-29467105cad1"
+        }
+      ],
+      "createdAt": "2025-03-21T05:12:54.517Z"
+    },
+    {
+      "id": "f6376397-62f3-487c-a5c6-c9a3c2f25e07",
+      "name": "Product",
+      "slug": "product",
+      "fields": [
+        {
+          "name": "Name",
+          "type": "text",
+          "required": false,
+          "id": "ede290b1-5fa8-441c-88b7-0b730ba57de5"
+        },
+        {
+          "name": "Description",
+          "type": "textarea",
+          "required": false,
+          "id": "6ec990fc-2856-4204-9b5d-33adabad1fab"
+        },
+        {
+          "name": "Purchased Date",
+          "type": "date",
+          "required": false,
+          "id": "21730c17-f352-44bd-81ee-7521de4fb108"
+        },
+        {
+          "name": "Category",
+          "type": "select",
+          "required": false,
+          "options": [
+            "ab"
+          ],
+          "id": "0cb4444c-59a4-471f-b0fb-2c55bf63b5e7"
+        }
+      ],
+      "createdAt": "2025-03-21T05:16:39.237Z"
     }
   ],
   "menuModules": [
@@ -462,6 +575,34 @@
       "link": "/test",
       "icon": "FileText",
       "contentTypeId": "b6c9d935-983d-4e10-a7ed-d92017bc6d45"
+    },
+    {
+      "id": "e3401db5-7908-4106-aa7f-365bd866516f",
+      "label": "Article",
+      "link": "/article",
+      "icon": "FileText",
+      "contentTypeId": "382bbcc7-5359-4b76-8bfe-7def3910f1f9"
+    },
+    {
+      "id": "d2dde4b8-3d58-49b1-92bc-06d1773e6318",
+      "label": "Test99",
+      "link": "/test99",
+      "icon": "FileText",
+      "contentTypeId": "860016ca-594c-4e8c-bdf0-59094240f1a9"
+    },
+    {
+      "id": "8c14c2de-71c8-4692-904a-97be96e3d9ef",
+      "label": "Article",
+      "link": "/article",
+      "icon": "FileText",
+      "contentTypeId": "f452b413-1cd0-402a-8bd7-fb028965a3fb"
+    },
+    {
+      "id": "380627a8-68a4-44ca-8b20-05c52044df3a",
+      "label": "Product",
+      "link": "/product",
+      "icon": "FileText",
+      "contentTypeId": "f6376397-62f3-487c-a5c6-c9a3c2f25e07"
     }
   ],
   "settings": [

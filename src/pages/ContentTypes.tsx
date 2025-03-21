@@ -9,9 +9,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Plus, Trash2, Edit, FileText, Database, List } from 'lucide-react';
+import { DynamicField } from '@/components/content-types/DynamicField';
 import { ContentType, ContentField } from '@/types';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const ContentTypes = () => {
   const navigate = useNavigate();
@@ -194,19 +196,32 @@ const ContentTypes = () => {
                       </div>
                       <div className="col-span-4">
                         <Label htmlFor={`field-${index}-type`} className="text-xs">Type</Label>
-                        <select
-                          id={`field-${index}-type`}
+                        <Select
                           value={field.type}
-                          onChange={(e) => handleFieldChange(index, { type: e.target.value as any })}
-                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                        >
-                          <option value="text">Text</option>
-                          <option value="number">Number</option>
-                          <option value="boolean">Boolean</option>
-                          <option value="date">Date</option>
-                          <option value="select">Select</option>
-                        </select>
+                          onValueChange={(value) => handleFieldChange(index, { type: value as ContentField['type'] })}>
+                          <SelectTrigger id={`field-${index}-type`}>
+                            <SelectValue placeholder="Select field type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="text">Text</SelectItem>
+                            <SelectItem value="number">Number</SelectItem>
+                            <SelectItem value="select">Select</SelectItem>
+                            <SelectItem value="date">Date</SelectItem>
+                            <SelectItem value="boolean">Boolean</SelectItem>
+                            <SelectItem value="textarea">Text Area</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
+                      {field.type === 'select' && (
+                        <div className="col-span-3">
+                          <Label className="text-xs">Options</Label>
+                          <Input
+                            placeholder="Comma-separated options"
+                            value={field.options?.join(',') || ''}
+                            onChange={(e) => handleFieldChange(index, { options: e.target.value.split(',').map(o => o.trim()).filter(Boolean) })}
+                          />
+                        </div>
+                      )}
                       <div className="col-span-2">
                         <Label className="text-xs">Required</Label>
                         <div className="flex items-center h-10">

@@ -22,9 +22,9 @@ export interface ContentType {
 export interface ContentField {
   id: string;
   name: string;
-  type: "text" | "textarea" | "number" | "boolean" | "date" | "select" | "image" | "relation";
+  type: 'text' | 'number' | 'select' | 'date' | 'boolean' | 'textarea';
   required: boolean;
-  options?: any;
+  options?: string[];
 }
 
 export interface MenuItem {

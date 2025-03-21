@@ -97,11 +97,11 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Helper function to save data
   const saveData = (path: string, data: any) => {
-    // Save to localStorage
-    localStorage.setItem(path, JSON.stringify(data));
-    
-    // Optionally attempt to save to JSON server, but don't depend on it
     try {
+      // Save to localStorage
+      localStorage.setItem(path, JSON.stringify(data));
+      
+      // Optionally attempt to save to JSON server, but don't depend on it
       fetch(`http://localhost:3001/${path}`, {
         method: 'POST',
         headers: {
@@ -111,11 +111,13 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       }).catch(err => {
         console.info('JSON Server might not be running, using localStorage only');
       });
+      
+      return data;
     } catch (error) {
-      console.info('JSON Server might not be running, using localStorage only');
+      console.error('Error saving data:', error);
+      toast.error('Failed to save data. Please try again.');
+      throw error;
     }
-    
-    return data;
   };
 
   // Content Type operations
@@ -180,62 +182,49 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       const newContentItem: ContentItem = {
         ...contentItem,
         id: uuidv4(),
-        contentTypeId: ''
+        contentTypeId: contentItem.contentTypeId
       };
       
-      // Add to state
-      setContentItems([...contentItems, newContentItem]);
+      // Update state with new item
+      const updatedItems = [...contentItems, newContentItem];
+      setContentItems(updatedItems);
       
-      // Find the content type to get its name for saving
+      // Save all items to localStorage in a single operation
+      localStorage.setItem('contentItems', JSON.stringify(updatedItems));
+      
+      // Find the content type for reference
       const contentType = contentTypes.find(ct => ct.id === contentItem.contentTypeId);
       if (contentType) {
-        // Create a key for localStorage
-        const storageKey = `contentItems_${contentType.name.toLowerCase().replace(/\s+/g, '-')}`;
-        
-        // Get existing items for this content type
-        const existingItems = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        
-        // Add new item and save back to localStorage
-        localStorage.setItem(storageKey, JSON.stringify([...existingItems, newContentItem]));
-        
         toast.success(`${contentType.name} item created successfully`);
       }
       
       return newContentItem;
     } catch (error) {
       console.error('Error adding content item:', error);
-      toast.error('Failed to create item. Please try again.');
+      toast.error('Failed to add content item. Please try again.');
       throw error;
     }
   };
 
-  const updateContentItem = (contentItem: ContentItem) => {
+  const updateContentItem = async (contentItem: ContentItem) => {
     try {
-      // Update in state
-      setContentItems(contentItems.map(item => item.id === contentItem.id ? contentItem : item));
+      const updatedItems = contentItems.map(item => item.id === contentItem.id ? contentItem : item);
+      setContentItems(updatedItems);
       
-      // Find the content type to get its name for saving
+      // Save to localStorage
+      localStorage.setItem('contentItems', JSON.stringify(updatedItems));
+      
+      // Find the content type for reference
       const contentType = contentTypes.find(ct => ct.id === contentItem.contentTypeId);
       if (contentType) {
-        // Create a key for localStorage
-        const storageKey = `contentItems_${contentType.name.toLowerCase().replace(/\s+/g, '-')}`;
-        
-        // Get existing items for this content type
-        const existingItems = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        
-        // Update the item in the array
-        const updatedItems = existingItems.map((item: ContentItem) => 
-          item.id === contentItem.id ? contentItem : item
-        );
-        
-        // Save back to localStorage
-        localStorage.setItem(storageKey, JSON.stringify(updatedItems));
-        
         toast.success(`${contentType.name} item updated successfully`);
       }
+      
+      return contentItem;
     } catch (error) {
       console.error('Error updating content item:', error);
-      toast.error('Failed to update item. Please try again.');
+      toast.error('Failed to update content item. Please try again.');
+      throw error;
     }
   };
 
@@ -244,32 +233,37 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       // Find the item to get its content type
       const itemToDelete = contentItems.find(item => item.id === id);
       
-      if (itemToDelete) {
-        // Find the content type
-        const contentType = contentTypes.find(ct => ct.id === itemToDelete.contentTypeId);
-        
-        if (contentType) {
-          // Remove from state
-          setContentItems(contentItems.filter(item => item.id !== id));
-          
-          // Create a key for localStorage
-          const storageKey = `contentItems_${contentType.name.toLowerCase().replace(/\s+/g, '-')}`;
-          
-          // Get existing items for this content type
-          const existingItems = JSON.parse(localStorage.getItem(storageKey) || '[]');
-          
-          // Remove the item from the array
-          const updatedItems = existingItems.filter((item: ContentItem) => item.id !== id);
-          
-          // Save back to localStorage
-          localStorage.setItem(storageKey, JSON.stringify(updatedItems));
-          
-          toast.success(`${contentType.name} item deleted successfully`);
-        }
+      if (!itemToDelete) {
+        throw new Error('Content item not found');
       }
+
+      // Find the content type
+      const contentType = contentTypes.find(ct => ct.id === itemToDelete.contentTypeId);
+      
+      if (!contentType) {
+        throw new Error('Content type not found');
+      }
+
+      // Remove from state
+      setContentItems(contentItems.filter(item => item.id !== id));
+      
+      // Create a key for localStorage
+      const storageKey = `contentItems_${contentType.name.toLowerCase().replace(/\s+/g, '-')}`;
+      
+      // Get existing items for this content type
+      const existingItems = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      
+      // Remove the item from the array
+      const updatedItems = existingItems.filter((item: ContentItem) => item.id !== id);
+      
+      // Save back to localStorage
+      localStorage.setItem(storageKey, JSON.stringify(updatedItems));
+      
+      toast.success(`${contentType.name} item deleted successfully`);
     } catch (error) {
       console.error('Error deleting content item:', error);
       toast.error('Failed to delete item. Please try again.');
+      throw error;
     }
   };
 

@@ -2,6 +2,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import React, { useState, useEffect } from 'react';
+import { DynamicField } from '@/components/content-types/DynamicField';
 import { useParams } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,11 +10,11 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Trash2, Edit } from 'lucide-react';
+import { Plus, Trash2, Edit, Check, X } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from 'sonner';
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { ControllerRenderProps, FieldValues, useForm } from "react-hook-form";
 import * as z from "zod";
 import { ContentType, ContentField, ContentItem } from "@/types";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,24 +39,24 @@ const DynamicContent = () => {
     if (foundType) {
       setContentType(foundType);
       
-      // Get the content items for this type
+      // Get the content items for this type from context
       const typeItems = contentItems.filter(item => item.contentTypeId === foundType.id);
-      
-      // Get items from localStorage
-      const storageKey = `contentItems_${contentTypeName.toLowerCase()}`;
-      try {
-        const storedItems = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        // Use only stored items that aren't in contentItems
-        const uniqueStoredItems = storedItems.filter((storedItem: ContentItem) => 
-          !typeItems.some(item => item.id === storedItem.id)
-        );
-        // Combine and set items
-        setItems([...typeItems, ...uniqueStoredItems]);
-      } catch (error) {
-        console.error('Error loading items from localStorage:', error);
-      }
+      setItems(typeItems);
     }
-  }, [contentTypeName, contentTypes, contentItems]);
+  }, [contentTypeName, contentTypes]);
+
+  // Update items when contentItems changes
+  useEffect(() => {
+    if (contentType) {
+      const typeItems = contentItems.filter(item => item.contentTypeId === contentType.id);
+      setItems(typeItems);
+    }
+  }, [contentItems, contentType]);
+
+  // Ensure items are always in sync with context
+  useEffect(() => {
+    return () => setItems([]);
+  }, []);
 
   // Create form schema dynamically based on content type fields
   const createFormSchema = (fields: ContentField[]) => {
@@ -68,6 +69,8 @@ const DynamicContent = () => {
         } else {
           schemaObj[field.name] = z.string().optional().refine(val => !val || /^\d+$/.test(val), { message: `${field.name} must be a number` });
         }
+      } else if (field.type === 'boolean') {
+        schemaObj[field.name] = z.boolean().optional().default(false);
       } else {
         if (field.required) {
           schemaObj[field.name] = z.string().min(1, { message: `${field.name} is required` });
@@ -119,21 +122,7 @@ const DynamicContent = () => {
           toast.success('Item created successfully');
         }
 
-        // Update items state
-        setItems(currentItem
-          ? items.map(item => item.id === currentItem.id ? updatedItem : item)
-          : [...items, updatedItem]);
-        
-        // Update localStorage
-        if (contentTypeName) {
-          const storageKey = `contentItems_${contentTypeName.toLowerCase()}`;
-          localStorage.setItem(storageKey, JSON.stringify(
-            currentItem
-              ? items.map(item => item.id === currentItem.id ? updatedItem : item)
-              : [...items, updatedItem]
-          ));
-        }
-        
+        // Let the context handle the state update
         setIsDialogOpen(false);
         setCurrentItem(null);
         form.reset();
@@ -144,21 +133,14 @@ const DynamicContent = () => {
       }
     };
 
-    const renderFieldInput = (field: ContentField, formField: any) => {
-      if (field.type === 'text' && field.name.toLowerCase().includes('description')) {
-        return (
-          <Textarea
-            placeholder={`Enter ${field.name.toLowerCase()}`}
-            {...formField}
-          />
-        );
-      }
-      
+    const renderFieldInput = (field: ContentField, formField: ControllerRenderProps<FieldValues, string>) => {
       return (
-        <Input
+        <DynamicField
+          type={field.type}
+          value={formField.value}
+          onChange={formField.onChange}
+          options={field.options}
           placeholder={`Enter ${field.name.toLowerCase()}`}
-          {...formField}
-          type={field.type === 'number' ? 'number' : 'text'}
         />
       );
     };
@@ -201,20 +183,6 @@ const DynamicContent = () => {
   const handleDelete = (item: ContentItem) => {
     if (window.confirm(`Are you sure you want to delete this item?`)) {
       deleteContentItem(item.id);
-      setItems(items.filter(i => i.id !== item.id));
-      
-      // Also remove from localStorage
-      if (contentTypeName) {
-        const storageKey = `contentItems_${contentTypeName.toLowerCase()}`;
-        try {
-          const storedItems = JSON.parse(localStorage.getItem(storageKey) || '[]');
-          const updatedItems = storedItems.filter((i: ContentItem) => i.id !== item.id);
-          localStorage.setItem(storageKey, JSON.stringify(updatedItems));
-        } catch (error) {
-          console.error('Error updating localStorage:', error);
-        }
-      }
-      
       toast.success('Item deleted successfully');
     }
   };
@@ -289,7 +257,19 @@ const DynamicContent = () => {
                 {items.map((item) => (
                   <TableRow key={item.id}>
                     {contentType.fields.map(field => (
-                      <TableCell key={`${item.id}-${field.id}`}>{item[field.name]}</TableCell>
+                      <TableCell key={`${item.id}-${field.id}`}>
+                        {field.type === 'boolean' ? (
+                          <div className="flex justify-center">
+                            {item[field.name] ? (
+                              <Check className="h-5 w-5 text-green-500" />
+                            ) : (
+                              <X className="h-5 w-5 text-red-500" />
+                            )}
+                          </div>
+                        ) : (
+                          item[field.name]
+                        )}
+                      </TableCell>
                     ))}
                     <TableCell>
                       <div className="flex gap-2">
