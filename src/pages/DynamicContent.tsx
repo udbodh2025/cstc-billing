@@ -74,14 +74,12 @@ const DynamicContent = () => {
         schemaObj[field.name] = z.boolean().optional().default(false);
       } else if (field.type === 'date' || field.type === 'datetime') {
         if (field.required) {
-          schemaObj[field.name] = z.string()
-            .transform((str) => new Date(str))
+          schemaObj[field.name] = z.coerce.date()
             .refine((date) => !isNaN(date.getTime()), {
               message: `${field.name} must be a valid date`
             });
         } else {
-          schemaObj[field.name] = z.string()
-            .transform((str) => str ? new Date(str) : undefined)
+          schemaObj[field.name] = z.coerce.date()
             .optional()
             .refine((date) => !date || !isNaN(date.getTime()), {
               message: `${field.name} must be a valid date`
