@@ -17,7 +17,7 @@ const getFileType = (file: File): FileType => {
 };
 
 const getUploadDir = (type: FileType): string => {
-  const baseDir = '/uploads';
+  const baseDir = '/public/uploads';
   switch (type) {
     case 'image':
       return `${baseDir}/images`;
@@ -55,17 +55,17 @@ export const uploadFile = async (file: File): Promise<UploadedFile> => {
     formData.append('path', path);
 
     // Send file to server
-    const response = await fetch('/api/upload', {
+    const response = await fetch('http://localhost:3001/api/upload', {
       method: 'POST',
-      body: formData
+      body: formData,
+      credentials: 'include'
     });
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Failed to upload file');
-    }
-
     const result = await response.json();
+    
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || 'Failed to upload file');
+    }
 
     return {
       originalName: file.name,

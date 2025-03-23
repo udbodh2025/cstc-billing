@@ -618,6 +618,40 @@
         }
       ],
       "createdAt": "2025-03-23T05:48:13.393Z"
+    },
+    {
+      "id": "01746bae-b06f-498b-bdc4-b0812ca20890",
+      "name": "Test25",
+      "slug": "test25",
+      "fields": [
+        {
+          "name": "Name",
+          "type": "text",
+          "required": false,
+          "id": "457e107f-75d4-48fa-98ca-948852137c37"
+        },
+        {
+          "name": "w",
+          "type": "date",
+          "required": false,
+          "id": "90bee541-718c-42c2-9a22-8a1e347b90d2"
+        }
+      ],
+      "createdAt": "2025-03-23T09:41:40.317Z"
+    },
+    {
+      "id": "359be43e-1107-4990-9430-b7c2ea9dce22",
+      "name": "Image ",
+      "slug": "image",
+      "fields": [
+        {
+          "name": "Image",
+          "type": "image",
+          "required": false,
+          "id": "a71ddb5e-eae1-4b8d-b7ad-5bfe2dc327ff"
+        }
+      ],
+      "createdAt": "2025-03-23T09:57:33.669Z"
     }
   ],
   "menuModules": [
@@ -673,6 +707,20 @@
       "link": "/fileinfo",
       "icon": "FileText",
       "contentTypeId": "546b13dc-eaac-4bea-8a6b-07410f4f8fbe"
+    },
+    {
+      "id": "122fcfe3-ea8d-4c2f-a6fc-2c1398c6c1de",
+      "label": "Test25",
+      "link": "/test25",
+      "icon": "FileText",
+      "contentTypeId": "01746bae-b06f-498b-bdc4-b0812ca20890"
+    },
+    {
+      "id": "a711b102-9fbe-4dc4-add5-3533cff7ba7c",
+      "label": "Image ",
+      "link": "/image-",
+      "icon": "FileText",
+      "contentTypeId": "359be43e-1107-4990-9430-b7c2ea9dce22"
     }
   ],
   "settings": [

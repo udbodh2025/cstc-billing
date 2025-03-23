@@ -10,7 +10,7 @@ const __dirname = dirname(__filename);
 // Configure multer for file upload
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    let uploadPath = 'public/uploads';
+    let uploadPath = path.join(__dirname, '../../public/uploads');
     
     // Determine subdirectory based on file type
     if (file.mimetype.startsWith('image/')) {

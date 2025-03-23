@@ -11,8 +11,10 @@ const app = express();
 
 // Enable CORS with specific options
 app.use(cors({
-  origin: true,
-  credentials: true
+  origin: ['http://127.0.0.1:8081', 'http://localhost:8081', 'http://localhost:3001'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Parse JSON and URL-encoded bodies
