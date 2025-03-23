@@ -1,7 +1,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
-
 import React, { useState, useEffect } from 'react';
+import { uploadFile, getFileUrl } from '@/lib/fileUpload';
 import { DynamicField } from '@/components/content-types/DynamicField';
 import { useParams } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -65,17 +65,38 @@ const DynamicContent = () => {
     fields?.forEach(field => {
       if (field.type === 'number') {
         if (field.required) {
-          schemaObj[field.name] = z.string().min(1, { message: `${field.name} is required` }).regex(/^\d+$/, { message: `${field.name} must be a number` });
+          schemaObj[field.name] = z.number({ required_error: `${field.name} is required` });
         } else {
-          schemaObj[field.name] = z.string().optional().refine(val => !val || /^\d+$/.test(val), { message: `${field.name} must be a number` });
+          schemaObj[field.name] = z.number().nullable();
         }
       } else if (field.type === 'boolean') {
         schemaObj[field.name] = z.boolean().optional().default(false);
       } else if (field.type === 'date' || field.type === 'datetime') {
         if (field.required) {
-          schemaObj[field.name] = z.date({ required_error: `${field.name} is required` });
+          schemaObj[field.name] = z.string()
+            .transform((str) => new Date(str))
+            .refine((date) => !isNaN(date.getTime()), {
+              message: `${field.name} must be a valid date`
+            });
         } else {
-          schemaObj[field.name] = z.date().optional();
+          schemaObj[field.name] = z.string()
+            .transform((str) => str ? new Date(str) : undefined)
+            .optional()
+            .refine((date) => !date || !isNaN(date.getTime()), {
+              message: `${field.name} must be a valid date`
+            });
+        }
+      } else if (field.type === 'file' || field.type === 'image' || field.type === 'csv') {
+        if (field.required) {
+          schemaObj[field.name] = z.any().refine(
+            (val) => val instanceof File || (typeof val === 'string' && val.length > 0),
+            { message: `${field.name} is required` }
+          );
+        } else {
+          schemaObj[field.name] = z.any().optional().refine(
+            (val) => !val || val instanceof File || (typeof val === 'string' && val.length > 0),
+            { message: `${field.name} must be a file or a valid file path` }
+          );
         }
       } else {
         if (field.required) {
@@ -109,15 +130,30 @@ const DynamicContent = () => {
     const onSubmit = async (data: FormValues) => {
       try {
         // Convert date objects to ISO strings
-        const processedData = Object.entries(data).reduce((acc, [key, value]) => {
+        const processedData = await Object.entries(data).reduce(async (accPromise, [key, value]) => {
+          const acc = await accPromise;
           const field = contentType.fields.find(f => f.name === key);
-          if (field?.type === 'date' && value instanceof Date) {
+          if (!field) return acc;
+
+          if ((field.type === 'date' || field.type === 'datetime') && value instanceof Date) {
             acc[key] = value.toISOString();
+          } else if (field.type === 'file' || field.type === 'image' || field.type === 'csv') {
+            // Handle file uploads
+            if (value instanceof File) {
+              // Upload the file and get its path
+              const uploadedFile = await uploadFile(value);
+              acc[key] = uploadedFile.path;
+            } else if (typeof value === 'string') {
+              // Keep existing file path
+              acc[key] = value;
+            }
+          } else if (field.type === 'number') {
+            acc[key] = value === '' ? null : Number(value);
           } else {
             acc[key] = value;
           }
           return acc;
-        }, {} as Record<string, any>);
+        }, Promise.resolve({} as Record<string, any>));
 
         let updatedItem;
         if (currentItem) {
@@ -164,15 +200,15 @@ const DynamicContent = () => {
 
     return (
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-4">
           {contentType.fields.map((field) => (
             <FormField
               key={field.id}
               control={form.control}
               name={field.name}
               render={({ field: formField }) => (
-                <FormItem>
-                  <FormLabel>{field.name}{field.required ? ' *' : ''}</FormLabel>
+                <FormItem className="w-full">
+                  <FormLabel className="text-base">{field.name}{field.required ? ' *' : ''}</FormLabel>
                   <FormControl>
                     {renderFieldInput(field, formField)}
                   </FormControl>
@@ -239,24 +275,25 @@ const DynamicContent = () => {
             Manage your {contentType.name.toLowerCase()} content.
           </p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="flex items-center gap-1" onClick={handleCreate}>
-              <Plus size={16} />
-              <span>Add {contentType.name}</span>
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[625px]">
-            <DialogHeader>
-              <DialogTitle>{currentItem ? `Edit ${contentType.name}` : `Create new ${contentType.name}`}</DialogTitle>
-              <DialogDescription>
-                Fill in the details for this {contentType.name.toLowerCase()}.
-              </DialogDescription>
-            </DialogHeader>
-            <FormComponent />
-          </DialogContent>
-        </Dialog>
+        <Button className="flex items-center gap-1" onClick={handleCreate}>
+        <Plus size={16} />
+        <span>Add {contentType.name}</span>
+      </Button>
       </div>
+
+      {currentItem || isDialogOpen ? (
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>{currentItem ? `Edit ${contentType.name}` : `Create new ${contentType.name}`}</CardTitle>
+            <CardDescription>
+              Fill in the details for this {contentType.name.toLowerCase()}.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <FormComponent />
+          </CardContent>
+        </Card>
+      ) : null}
 
       {items.length > 0 ? (
         <Card>
@@ -292,6 +329,17 @@ const DynamicContent = () => {
                             dateStyle: 'medium',
                             timeStyle: 'short'
                           })
+                        ) : field.type === 'image' ? (
+                          item[field.name] ? (
+                            <div className="relative w-16 h-16 overflow-hidden rounded">
+                              <img
+                                src={getFileUrl(item[field.name])}
+                                alt={field.name}
+                                className="object-cover w-full h-full"
+                                loading="lazy"
+                              />
+                            </div>
+                          ) : null
                         ) : (
                           item[field.name]
                         )}

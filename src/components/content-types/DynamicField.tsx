@@ -9,10 +9,11 @@ import { Button } from '@/components/ui/button';
 import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
-import { Check, X } from 'lucide-react';
+import { Check, X, Upload, FileUp, FileDown } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface DynamicFieldProps {
-  type: 'text' | 'textarea' | 'number' | 'boolean' | 'date' | 'datetime' | 'select';
+  type: 'text' | 'textarea' | 'number' | 'boolean' | 'date' | 'datetime' | 'select' | 'file' | 'image' | 'csv';
   value: any;
   onChange: (value: any) => void;
   options?: string[];
@@ -28,14 +29,92 @@ export const DynamicField: React.FC<DynamicFieldProps> = ({
   placeholder,
   isReadOnly = false
 }) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (type === 'image' && !file.type.startsWith('image/')) {
+        toast.error('Please select an image file');
+        return;
+      }
+      if (type === 'csv' && file.type !== 'text/csv') {
+        toast.error('Please select a CSV file');
+        return;
+      }
+      onChange(file);
+    }
+  };
+
+  const handleExportCSV = () => {
+    if (!value) return;
+    const blob = new Blob([value], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'export.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  if (type === 'file' || type === 'image' || type === 'csv') {
+    return (
+      <div className="space-y-2">
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={() => document.getElementById(`file-${type}`).click()}
+            disabled={isReadOnly}
+          >
+            {type === 'image' ? <Upload className="mr-2 h-4 w-4" /> : 
+             type === 'csv' ? <FileUp className="mr-2 h-4 w-4" /> :
+             <FileUp className="mr-2 h-4 w-4" />}
+            {value ? (type === 'image' ? 'Change Image' : 'Change File') : `Upload ${type.toUpperCase()}`}
+          </Button>
+          {type === 'csv' && value && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleExportCSV}
+              className="px-3"
+            >
+              <FileDown className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+        <input
+          id={`file-${type}`}
+          type="file"
+          className="hidden"
+          onChange={handleFileChange}
+          accept={type === 'image' ? 'image/*' : type === 'csv' ? '.csv' : '*'}
+          disabled={isReadOnly}
+        />
+        {type === 'image' && value && (
+          <div className="mt-2 max-h-[300px] overflow-y-auto">
+            <img
+              src={typeof value === 'string' ? value : URL.createObjectURL(value)}
+              alt="Preview"
+              className="max-w-xs rounded-md"
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
+
   switch (type) {
     case 'number':
       return (
         <Input
           type="number"
-          value={value || ''}
-          onChange={(e) => onChange(e.target.value ? Number(e.target.value) : null)}
+          value={value ?? ''}
+          onChange={(e) => {
+            const val = e.target.value;
+            onChange(val === '' ? null : isNaN(Number(val)) ? null : Number(val));
+          }}
           placeholder={placeholder}
+          min="0"
         />
       );
 
@@ -103,6 +182,47 @@ export const DynamicField: React.FC<DynamicFieldProps> = ({
             )}
           </PopoverContent>
         </Popover>
+      );
+
+    case 'select':
+      return (
+        <Select
+          value={value || ''}
+          onValueChange={onChange}
+          disabled={isReadOnly}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder={placeholder} />
+          </SelectTrigger>
+          <SelectContent>
+            {options.map((option) => (
+              <SelectItem key={option} value={option}>
+                {option}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      );
+
+    case 'textarea':
+      return (
+        <Textarea
+          value={value || ''}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          disabled={isReadOnly}
+        />
+      );
+
+    case 'text':
+      return (
+        <Input
+          type="text"
+          value={value || ''}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          disabled={isReadOnly}
+        />
       );
 
     case 'date':

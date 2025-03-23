@@ -464,6 +464,134 @@
         }
       ],
       "createdAt": "2025-03-21T05:16:39.237Z"
+    },
+    {
+      "id": "6721181e-386d-4668-9f68-a12c201c7b35",
+      "name": "Document",
+      "slug": "document",
+      "fields": [
+        {
+          "name": "Name",
+          "type": "text",
+          "required": false,
+          "id": "7b934fed-8f24-41d2-a93f-72e2a01006ad"
+        },
+        {
+          "name": "Image",
+          "type": "image",
+          "required": false,
+          "id": "9f6baaaf-4f70-4608-9f58-5e7f4c845ba3"
+        },
+        {
+          "name": "File",
+          "type": "file",
+          "required": false,
+          "id": "7f9cab08-5dc4-46f9-a4f1-bf88cbaeca2a"
+        },
+        {
+          "name": "CSV",
+          "type": "csv",
+          "required": false,
+          "id": "6ae5eeed-6829-4a4c-9033-ba3eded3e2b3"
+        }
+      ],
+      "createdAt": "2025-03-21T06:22:07.662Z"
+    },
+    {
+      "id": "4c67004e-af19-4c33-95c2-a95d536d3785",
+      "name": "Document",
+      "slug": "document",
+      "fields": [
+        {
+          "name": "Name",
+          "type": "text",
+          "required": false,
+          "id": "3e92ae9c-7e9b-451b-b0ad-1749f0eac14c"
+        },
+        {
+          "name": "File",
+          "type": "file",
+          "required": false,
+          "id": "8ff31466-4c16-4b68-bb7e-7edf19a3e69b"
+        },
+        {
+          "name": "Image",
+          "type": "image",
+          "required": false,
+          "id": "1d24c9b2-6b01-495c-a577-d70d611e5479"
+        },
+        {
+          "name": "CSV",
+          "type": "csv",
+          "required": false,
+          "id": "f0f0721e-83dd-43a5-a195-5ca8eff10876"
+        }
+      ],
+      "createdAt": "2025-03-21T06:40:57.311Z"
+    },
+    {
+      "id": "ac67246f-bac8-4908-831b-bd5d5f253790",
+      "name": "Article",
+      "slug": "article",
+      "fields": [
+        {
+          "name": "Name",
+          "type": "text",
+          "required": false,
+          "id": "59d1713f-20f6-4f44-9e53-68849a18a6fb"
+        },
+        {
+          "name": "Description",
+          "type": "text",
+          "required": false,
+          "id": "1dae01ec-7f14-48cc-82ba-f9ea7a24e9ae"
+        },
+        {
+          "name": "Published",
+          "type": "boolean",
+          "required": false,
+          "id": "0ece8b0d-f67d-4371-bf59-e0bd0075398d"
+        }
+      ],
+      "createdAt": "2025-03-23T05:12:12.256Z"
+    },
+    {
+      "id": "62d924e9-8a90-4922-bdd6-7d02854407fe",
+      "name": "Product",
+      "slug": "product",
+      "fields": [
+        {
+          "name": "Name",
+          "type": "text",
+          "required": false,
+          "id": "9c5b32a4-6cb4-40c6-95f4-aa48c9dc1a2b"
+        },
+        {
+          "name": "Size",
+          "type": "number",
+          "required": false,
+          "id": "49431ba4-67a1-457d-8f17-006463e5e673"
+        },
+        {
+          "name": "Qty",
+          "type": "number",
+          "required": false,
+          "id": "1f7004c3-91cd-421b-82d2-1d5b2bd9d310"
+        },
+        {
+          "name": "Image",
+          "type": "image",
+          "required": false,
+          "id": "9f58d3aa-0430-4d8e-b4dd-af8d6f61d9bd"
+        },
+        {
+          "name": "Purchased Date",
+          "type": "date",
+          "required": false,
+          "id": "ee630a95-f12a-4c77-9c5e-52b80abbb79f"
+        }
+      ],
+      "createdAt": "2025-03-23T05:13:45.849Z"
     }
   ],
   "menuModules": [
@@ -603,6 +731,34 @@
       "link": "/product",
       "icon": "FileText",
       "contentTypeId": "f6376397-62f3-487c-a5c6-c9a3c2f25e07"
+    },
+    {
+      "id": "93fe0e9e-14c2-457f-b6a6-3c5ab0b44a88",
+      "label": "Document",
+      "link": "/document",
+      "icon": "FileText",
+      "contentTypeId": "6721181e-386d-4668-9f68-a12c201c7b35"
+    },
+    {
+      "id": "48bbb8cb-327f-4b40-bc05-744009f3119f",
+      "label": "Document",
+      "link": "/document",
+      "icon": "FileText",
+      "contentTypeId": "4c67004e-af19-4c33-95c2-a95d536d3785"
+    },
+    {
+      "id": "b273312d-f675-47ff-a54e-b323276f4b4b",
+      "label": "Article",
+      "link": "/article",
+      "icon": "FileText",
+      "contentTypeId": "ac67246f-bac8-4908-831b-bd5d5f253790"
+    },
+    {
+      "id": "028e88c2-7860-493a-916e-d24b63b18b8c",
+      "label": "Product",
+      "link": "/product",
+      "icon": "FileText",
+      "contentTypeId": "62d924e9-8a90-4922-bdd6-7d02854407fe"
     }
   ],
   "settings": [
