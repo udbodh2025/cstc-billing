@@ -2,7 +2,7 @@
 import { toast } from "@/hooks/use-toast";
 import {User, ContentType, MenuModule, MenuItem, ContentItem, Settings } from "@/types";
 // Base API URL for JSON Server
-const API_URL = "http://localhost:3001";
+const API_URL = "http://localhost:3000";
 
 // Generic fetch function with error handling
 async function fetchWithErrorHandling(url: string, options: RequestInit = {}) {

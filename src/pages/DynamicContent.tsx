@@ -10,8 +10,9 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Trash2, Edit, Check, X } from 'lucide-react';
+import { Plus, Trash2, Edit, Check, X, Download, Upload } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { exportToCSV, importFromCSV } from '@/lib/csvUtils';
 import { toast } from 'sonner';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ControllerRenderProps, FieldValues, useForm } from "react-hook-form";
@@ -275,10 +276,52 @@ const DynamicContent = () => {
             Manage your {contentType.name.toLowerCase()} content.
           </p>
         </div>
-        <Button className="flex items-center gap-1" onClick={handleCreate}>
-        <Plus size={16} />
-        <span>Add {contentType.name}</span>
-      </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" className="flex items-center gap-1" onClick={() => {
+            const csvContent = exportToCSV(items, contentType);
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${contentType.name.toLowerCase()}-export.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+          }}>
+            <Download size={16} />
+            <span>Export CSV</span>
+          </Button>
+          <Button variant="outline" className="flex items-center gap-1" onClick={() => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.csv';
+            input.onchange = async (e) => {
+              const file = (e.target as HTMLInputElement).files?.[0];
+              if (file) {
+                try {
+                  const items = await importFromCSV(file, contentType);
+                  items.forEach(async (item) => {
+                    await addContentItem({
+                      id: uuidv4(),
+                      contentTypeId: contentType.id,
+                      ...item
+                    });
+                  });
+                  toast.success('Items imported successfully');
+                } catch (error) {
+                  toast.error('Failed to import CSV file');
+                }
+              }
+            };
+            input.click();
+          }}>
+            <Upload size={16} />
+            <span>Import CSV</span>
+          </Button>
+          <Button className="flex items-center gap-1" onClick={handleCreate}>
+            <Plus size={16} />
+            <span>Add {contentType.name}</span>
+          </Button>
+        </div>
       </div>
 
       {currentItem || isDialogOpen ? (

@@ -22,63 +22,78 @@ const storage = multer.diskStorage({
     }
     
     // Create directory if it doesn't exist
-    fs.mkdirSync(uploadPath, { recursive: true });
-    cb(null, uploadPath);
+    try {
+      fs.mkdirSync(uploadPath, { recursive: true });
+      cb(null, uploadPath);
+    } catch (error) {
+      cb(new Error('Failed to create upload directory'));
+    }
   },
   filename: function (req, file, cb) {
-    // Use the filename from the request body or generate one
-    const fileName = path.basename(req.body.path || file.originalname);
-    cb(null, fileName);
+    try {
+      // Generate a unique filename to prevent overwriting
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      const ext = path.extname(file.originalname);
+      const fileName = path.basename(file.originalname, ext) + '-' + uniqueSuffix + ext;
+      cb(null, fileName);
+    } catch (error) {
+      cb(new Error('Failed to generate filename'));
+    }
   }
 });
 
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 10 * 1024 * 1024 // 10MB limit
+    fileSize: 10 * 1024 * 1024 // 10MB limit to match client-side
   },
   fileFilter: function (req, file, cb) {
-    // Validate file types
-    if (file.mimetype.startsWith('image/') ||
-        file.mimetype === 'text/csv' ||
-        file.mimetype === 'application/pdf' ||
-        file.mimetype === 'application/msword' ||
+    // Allow files based on type
+    if (file.mimetype.startsWith('image/') || 
+        file.mimetype === 'text/csv' || 
+        file.mimetype === 'application/pdf' || 
+        file.mimetype === 'application/msword' || 
         file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
       cb(null, true);
     } else {
-      cb(new Error('Invalid file type'));
+      cb(new Error('Invalid file type. Allowed types: images, CSV, PDF, and Word documents'));
     }
   }
 });
 
 export default (req, res, next) => {
   if (req.path === '/api/upload') {
-    if (req.method === 'POST') {
-      upload.single('file')(req, res, (err) => {
-        if (err) {
-          return res.status(400).json({ message: err.message });
-        }
-        if (!req.file) {
-          return res.status(400).json({ message: 'No file uploaded' });
-        }
-        res.json({
-          path: '/uploads/' + path.relative('public/uploads', req.file.path).replace(/\\/g, '/')
+    upload.single('file')(req, res, (err) => {
+      res.setHeader('Content-Type', 'application/json');
+      
+      if (err) {
+        return res.status(400).json({ 
+          success: false,
+          message: err.message 
         });
-      });
-    } else if (req.method === 'DELETE') {
-      const filePath = path.join('public', req.query.path);
-      if (!filePath.startsWith(path.join('public', 'uploads'))) {
-        return res.status(400).json({ message: 'Invalid file path' });
       }
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          return res.status(400).json({ message: 'Failed to delete file' });
-        }
-        res.json({ message: 'File deleted successfully' });
-      });
-    } else {
-      res.status(405).json({ message: 'Method not allowed' });
-    }
+      
+      if (!req.file) {
+        return res.status(400).json({ 
+          success: false,
+          message: 'No file uploaded' 
+        });
+      }
+      
+      try {
+        const relativePath = path.relative('public/uploads', req.file.path);
+        res.status(200).json({
+          success: true,
+          path: '/uploads/' + relativePath,
+          message: 'File uploaded successfully'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success: false,
+          message: 'Server error while processing upload'
+        });
+      }
+    });
   } else {
     next();
   }

@@ -592,6 +592,32 @@
         }
       ],
       "createdAt": "2025-03-23T05:13:45.849Z"
+    },
+    {
+      "id": "546b13dc-eaac-4bea-8a6b-07410f4f8fbe",
+      "name": "FileInfo",
+      "slug": "fileinfo",
+      "fields": [
+        {
+          "name": "Name",
+          "type": "text",
+          "required": false,
+          "id": "5a73a434-89d5-44a9-b958-0eca4ff1547a"
+        },
+        {
+          "name": "File",
+          "type": "file",
+          "required": false,
+          "id": "ad5c7441-c9bd-414e-b376-d1a3b7fdc5ab"
+        },
+        {
+          "name": "CSV",
+          "type": "csv",
+          "required": false,
+          "id": "fa49997f-afc0-40b3-9c09-b539d8d594b3"
+        }
+      ],
+      "createdAt": "2025-03-23T05:48:13.393Z"
     }
   ],
   "menuModules": [
@@ -628,125 +654,6 @@
       "order": 1
     },
     {
-      "id": "acee1e41-4c00-48b2-bcb0-744ca0236e7c",
-      "label": "as",
-      "path": "/as",
-      "icon": "file-text",
-      "contentTypeId": null
-    },
-    {
-      "id": "8dd2b9cd-ef38-490f-b985-3bfadc235e86",
-      "label": "Bs Layout",
-      "link": "/bs-layout",
-      "icon": "FileText",
-      "contentTypeId": "54e7a83a-41ee-43ed-af34-5e5128aabd4b"
-    },
-    {
-      "id": "2c63883c-2dee-4300-8944-3d238319fb5b",
-      "label": "Test",
-      "link": "/test",
-      "icon": "FileText",
-      "contentTypeId": "197f4c90-2f3b-472b-a1fa-f7d0a75bc641"
-    },
-    {
-      "id": "03eb14cf-96f5-4cad-a07d-c98beb930644",
-      "label": "Test",
-      "link": "/test",
-      "icon": "FileText",
-      "contentTypeId": "39071f0a-a252-4e3e-8362-c58bdfdf7c88"
-    },
-    {
-      "id": "63ceaeef-c901-40f0-9949-f013a5822ffd",
-      "label": "Test",
-      "link": "/test",
-      "icon": "FileText",
-      "contentTypeId": "43619eab-3001-461c-9865-4318d3d92eb4"
-    },
-    {
-      "id": "f9d6cef7-a6a5-494f-9930-a7184e7a10ed",
-      "label": "Test",
-      "link": "/test",
-      "icon": "FileText",
-      "contentTypeId": "337e10ac-4322-4752-9d3a-7d3303f0707e"
-    },
-    {
-      "id": "4bd08ad2-21c2-484c-9eb6-cae08a055246",
-      "label": "Bs Layout",
-      "link": "/bs-layout",
-      "icon": "FileText",
-      "contentTypeId": "118e8f1e-898a-47a2-bd06-aaaffdf3d46e"
-    },
-    {
-      "id": "d61e14ca-9588-4209-861b-349d10ff7d01",
-      "label": "99",
-      "link": "/99",
-      "icon": "FileText",
-      "contentTypeId": "ac620fe4-842e-426a-9e08-5ad50b549390"
-    },
-    {
-      "id": "d0193a59-3869-413e-ab2e-35346a64a5ac",
-      "label": "test111",
-      "link": "/test111",
-      "icon": "FileText",
-      "contentTypeId": "35cd52bb-e6b7-4c11-9834-a313ac98b864"
-    },
-    {
-      "id": "bb0212d1-069c-4166-9483-1e6aca9af677",
-      "label": "Test",
-      "link": "/test",
-      "icon": "FileText",
-      "contentTypeId": "08a0c44a-d91f-47da-8896-85e9eb1f649d"
-    },
-    {
-      "id": "fd0e98d1-6a97-4815-a06c-883bf94f95c5",
-      "label": "Test",
-      "link": "/test",
-      "icon": "FileText",
-      "contentTypeId": "b6c9d935-983d-4e10-a7ed-d92017bc6d45"
-    },
-    {
-      "id": "e3401db5-7908-4106-aa7f-365bd866516f",
-      "label": "Article",
-      "link": "/article",
-      "icon": "FileText",
-      "contentTypeId": "382bbcc7-5359-4b76-8bfe-7def3910f1f9"
-    },
-    {
-      "id": "d2dde4b8-3d58-49b1-92bc-06d1773e6318",
-      "label": "Test99",
-      "link": "/test99",
-      "icon": "FileText",
-      "contentTypeId": "860016ca-594c-4e8c-bdf0-59094240f1a9"
-    },
-    {
-      "id": "8c14c2de-71c8-4692-904a-97be96e3d9ef",
-      "label": "Article",
-      "link": "/article",
-      "icon": "FileText",
-      "contentTypeId": "f452b413-1cd0-402a-8bd7-fb028965a3fb"
-    },
-    {
-      "id": "380627a8-68a4-44ca-8b20-05c52044df3a",
-      "label": "Product",
-      "link": "/product",
-      "icon": "FileText",
-      "contentTypeId": "f6376397-62f3-487c-a5c6-c9a3c2f25e07"
-    },
-    {
-      "id": "93fe0e9e-14c2-457f-b6a6-3c5ab0b44a88",
-      "label": "Document",
-      "link": "/document",
-      "icon": "FileText",
-      "contentTypeId": "6721181e-386d-4668-9f68-a12c201c7b35"
-    },
-    {
-      "id": "48bbb8cb-327f-4b40-bc05-744009f3119f",
-      "label": "Document",
-      "link": "/document",
-      "icon": "FileText",
-      "contentTypeId": "4c67004e-af19-4c33-95c2-a95d536d3785"
-    },
-    {
       "id": "b273312d-f675-47ff-a54e-b323276f4b4b",
       "label": "Article",
       "link": "/article",
@@ -759,6 +666,13 @@
       "link": "/product",
       "icon": "FileText",
       "contentTypeId": "62d924e9-8a90-4922-bdd6-7d02854407fe"
+    },
+    {
+      "id": "2b40481e-1c99-44b9-aa2a-8b790a3ec0f8",
+      "label": "FileInfo",
+      "link": "/fileinfo",
+      "icon": "FileText",
+      "contentTypeId": "546b13dc-eaac-4bea-8a6b-07410f4f8fbe"
     }
   ],
   "settings": [
